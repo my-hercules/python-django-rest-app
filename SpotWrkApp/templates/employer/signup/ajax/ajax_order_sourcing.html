@@ -1,0 +1,82 @@
+{%load staticfiles%}
+<span class = "text-header" >ADD CANDIDATES</span><br>
+		<span class = "text-tiny" >Add candidates in the <Industry name> and will <skill>, <skill>.. skills.</span>
+		<div class = "color-dlg border-blue" style = "margin-top:5px;">
+			<div class = "dlg-skill-content" style = "position:relative">
+				<div class = "candidate-job">
+					<div class = "candidate-intro">
+						<div class = "candidate-intro-image-job"></div>
+						<div class = "container-fluid text-center"><span class = "text-small">About Job</span></div>
+					</div>
+					<div class = "candidate-content">
+				        <div style = "width:55%">
+				        	{{order_form.job_detail}}
+							<!-- <textarea name = "skill" placeholder = "Describe Job" autofocus wrap = "hard">{{candi_edit.description}}</textarea> -->
+							<div class = "margin-control"><span class = "text-small">or</span></div>
+							<input type="file" id="myfile_JD" name = "file_JD" style = 'visibility:hidden;height:0px'>
+							<a class = "btn blue-button" onclick="document.getElementById('myfile_JD').click();">UPLOAD JD</a>
+						  	<div id = "fake_JD" class = "text-small"></div>
+						</div>
+					</div>
+				</div>
+				<div class="dlg-v-stick"></div>
+				<div class = "candidate-job">
+					<div class = "candidate-intro">
+						<div class = "candidate-intro-image-client"></div>
+						<div class = "container-fluid text-center"><span class = "text-small">About Client</span></div>
+					</div>
+					<div class = "candidate-content">
+				        <div class = "candidate-content-60">
+				        	{{order_form.client_name}}
+							<!-- <input name = "client_name" id = "client_name" type = "text" placeholder = "Client name" value="{{candi_edit.client_name}}"> -->
+				        	
+						</div>
+						<div class = "candidate-content-35">
+							<input id = "isAnonymous1" onclick="if($(this).is(':checked')) $('#id_client_name').val('Anonymous'); else $('#id_client_name').val('');" style = "border:0.5px solid #4b74ff;width:15px;height:15px;" type = "checkbox" value="Anonymous"><span style ="margin-top:1px;" class = "text-small">Anonymous</span>
+						</div>
+						<div class = "candidate-content-60">
+							{{order_form.client_description}}
+							<!-- <textarea name = "client_description" type = "text" placeholder = "Client Description, Product/Service">{{candi_edit.client_description}}</textarea> -->
+						</div>
+						<div class = "candidate-content-35">
+							{{order_form.company_domain}}
+							<!-- <input name = "client_site" type = "text" placeholder = "http://www.company.com" value = "{{candi_edit.client_site}}"> -->
+						</div>
+						<div style="float:left;margin-top:-5px" class = "new-line"><span class = "text-tiny">Add fields seperated by commas.</span></div>
+					</div>
+
+				</div>
+				<div class="dlg-v-stick"></div>
+				<div class = "candidate-job">
+					<div class = "candidate-intro">
+						<div class = "candidate-intro-image-candidate"></div>
+						<div class = "container-fluid text-center"><span class = "text-small">Must haves</span></div>
+					</div>
+					<div class = "candidate-content" id = "new_candidate">
+						<div style = "width:60%">
+							<div class = "text-small left-float top-margin-small">1.</div>
+							<div style = "width:95%;float:right" class = "bottom-margin">
+								<!-- <input class = "bottom-margin" style = "width:95%;float:right" name = "skill" placeholder = "Must go through core skill test." autofocus wrap = "hard"></input> -->
+								{{order_form.needed_skill}}
+							</div>
+							<div class = "text-small left-float top-margin-medium">2.</div>
+							<div style = "width:95%;float:right" class = "bottom-margin">
+								<!-- <input class = "bottom-margin" style = "width:95%;float:right" name = "skill" placeholder = "Must be willing to work for long hours." autofocus wrap = "hard"></input> -->
+								{{order_form.needed_hours}}
+							</div>
+							<div class = "text-small left-float top-margin-medium">3.</div>
+							<div style = "width:95%;float:right" class = "bottom-margin">
+								<!-- <input class = "bottom-margin" style = "width:95%;float:right" name = "skill" placeholder = "Must have his commutation." autofocus wrap = "hard"></input> -->
+								{{order_form.needed_communication}}
+							</div>
+						</div>
+					</div>
+					<a data-dismiss="modal" style = "position:absolute;right:-30px;bottom:0px;" href = "/ajax/profile" onclick = "$('#btn_candidatesave').onclick()" class = "text-center candidate_btn_back" style = "padding-top:18px;width:200px;height:40px;">Back  &larr;</a>
+				</div>
+			</div>
+			<div class = "dlg-toggle-menu">
+				<div class = "toggle-reset">
+				</div>
+				<button class = "toggle-save border-none" type ="submit" name = "save_sourcing"></button>
+			</div>
+		</div>

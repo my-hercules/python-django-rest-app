@@ -1,0 +1,113 @@
+{% load staticfiles %}
+    <header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 bg-agency">
+                    <div class="agency_field">
+                        <p class="Agency-Boost-your-bu"><b class = "bold-font"><u>A</u>g<u>enc</u>y</b><br> <b class = "bold-font">Boost</b> your business and reach</p>
+                        <p class="Get-more-clients-and">Get more clients and leave all the hassle for us</p>
+                        <div class = "button-field">
+                            <button data-toggle="modal" onclick="nextTab(1);setType('Company');" data-target="#modal1" class="btn blue-button">SIGN UP</button>
+                            <button data-toggle="modal" onclick="nextTab(2)" data-target="#modal1" class="btn white-button">SIGN IN</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6 bg-freelancer">
+                    <div class="freelancer_field">
+                        <p class="Agency-Boost-your-bu"><b class = "bold-font"><u>Freelancer</u><br> Earn</b> more with spotwrks</p>
+                        <p class="Get-more-clients-and">Don't let your chosen candidates go waste. Find them a perfect match on spotwrks</p>
+                        <div class = "row button-field">
+                            <button data-toggle="modal" onclick="nextTab(1);setType('Freelance');" data-target="#modal1" class="col-sm-4 btn blue-button">SIGN UP</button>
+                            <button data-toggle="modal" onclick="nextTab(2)" data-target="#modal1" class="col-sm-4 btn white-button">SIGN IN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-popup modal-active">
+                <div class = "testbox signup " id = "signup">
+                    <div class = "stripe-blue-left" id = "stripe-blue-left"></div>
+                    <div class="row" id = "signup-header">
+                        <div class="col-lg-12 text-center ">
+                            <h2 onclick = "nextTab(1)" class = "h2-signin" id = "h2-signup">Sign Up</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class = "testbox signin sign-margin sign-margin-right"  id  = "signin">
+                    <div class = "stripe-blue-right" id = "stripe-blue-right"></div>
+                    <div class="row" id = "signin-header">
+                        <div class="col-lg-12 text-center">
+                            <h2 onclick="nextTab(2)" class = "h2-signup" id = "h2-signin">Sign In</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class = "half-box">
+                    <div class="row signup-content sign-content" id = "signup-content">
+                        <div class="col-lg-8 col-lg-offset-2 signform">
+                            <form id = "signform" action="/register" method="post">
+                                {% csrf_token %}
+                                <div class = "form-group col-xs-12 floating-label-form-group controls text-center">
+                                    <div id = "btn-list" class = "btn-list">
+                                        <div id = "mylist-1" class = "company-font">Company</div>
+                                        <div id = "list-2" class = "company-font">Freelance</div>
+                                    </div>
+                                </div>
+                                <div class="row control-group">
+                                    <div id = "text-company" class="form-group col-xs-12 floating-label-form-group controls">
+                                        <input type="text" class="form-control" placeholder="Company Name" id ="txtcompanyname" name="txtcompanyname" title="Please enter Company Name.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="row control-group">
+                                    <div id = "text-email" class="form-group col-xs-12 floating-label-form-group controls">
+                                        <input type="email" class="form-control" name = "txtemail" placeholder="Email" id="email" required title="Please enter your email address.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="row control-group">
+                                    <div id = "text-password" class="form-group col-xs-12 floating-label-form-group controls">
+                                        <input type="password" name = "txtpassword" class="form-control" placeholder="Password" id="password" required data-validation-required-message="Please enter your password." >
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <!--pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Your password must be at least 6 characters as well as contain at least one uppercase, one lowercase, and one number."!-->
+                                </div>
+                                <br>
+                                <div id="success"></div>
+                                <div class="row">
+                                    <div class="form-group col-xs-12 text-center">
+                                        <button id = "sign-submit-button" type="submit" class="btn blue-button btn-lg btn-signup">Sign Up</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>                       
+                <div class = "stick">
+                </div>
+                <div class = "half-box">
+                    <div class="row signin-content " id = "signin-content">
+                        <div class = "container-fluid">
+                            <div class="row social-link">
+                                <div class="col-sm-12">
+                                    <a href = "{% url 'social:begin' 'facebook' %}" class = "btn btn-lg btn-social-facebook"><span><img src="{% static "img/spotwrk/fb-art.png" %}">FACE BOOK</span></a>
+                                </div>
+                                <div class="col-sm-12">
+                                    <a href = "{% url 'social:begin' 'linkedin-oauth2' %}" class = "col-xs-12 btn btn-lg btn-social-linkedin"><img src="{% static "img/spotwrk/li_logo.png" %}">LINKEDIN</a>
+                                </div>
+                                <div class="col-sm-12">
+                                    <a href = "{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}" class = "col-xs-12 btn btn-lg btn-social-google"><img src="{% static "img/spotwrk/g_logo.png" %}">GOOGLE</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

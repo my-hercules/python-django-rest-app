@@ -1,0 +1,53 @@
+{%load staticfiles%}
+		<div class = "table_list top-margin-large left-float" style = "position:relative;width:45%;">
+			<div class = "table_header table_header_font" style = "border-bottom:solid 0.5px #ecedf4;">
+				<span class = "" style = "margin-left:40px;">Candidates to be screeened</span>
+			</div>
+			<div class = "table_candidate_list" style = "height:auto;padding:0px;width:100%;">
+				<div style = "width:10%" class = "table_candidate_no">
+				{%for candidate in order.ecandidate_set.all%}
+					<div class = "table_candidate_item"><p class = "text-center full-width">{{forloop.counter}}.</p></div>
+				{%endfor%}
+				</div>
+				<div style = "width:90%">
+					<div id="sortable">
+				{%for candidate in order.ecandidate_set.all%}
+					  	<div id = "draggable_widget" data-toggle="modal" data-target="#modal1" class="ui-state-default table_candidate_item_content new-line" onclick = "show_candidate({{candidate.id}})">
+				  			<div style = "width:10%">
+				  				<p class = "table_drag_icon left-margin-small"></p>
+				  			</div>
+					  		<div style = "width:40%">
+					  			<span class = "table_candidate_name_font right-margin-large" style = "width:100%;word-wrap:break-word;">{{candidate.candidate_fname}}&nbsp{{candidate.candidate_lname}}</span><br>
+					  			<span style = "word-wrap:break-word;" class = "table_status_font">{{candidate.candidate_location}}</span>
+					  		</div>
+					  		<div class = "" style = "width:30%">
+					  			<p style = "word-wrap:break-word;width:100%" class = "table_status_font bottom-margin">{{candidate.candidate_role}}</p>
+					  			<span style = "word-wrap:break-word;width:100%" class = "table_status_font text-bold">{{candidate.candidate_company}}</span>
+					  		</div>
+					  		<span style = "width:15%" id = "skill_box{{forloop.counter}}"></span>
+							<script>
+								var str = "{{candidate.candidate_skill}}";
+								newfilter = str.split(",");
+								$.each(newfilter,function(no,value){
+									if(value != ""){
+										if(value.length>8)
+											value = value.substring(0,8)+"...";
+										$("#skill_box{{forloop.counter}}").append("<div class = 'new-line skill-tag-overview' style= 'margin-top:5px;'>"+value+"</div>");
+									}
+								});
+							</script>
+						</div>
+				{%endfor%}
+					</div>
+				</div>
+			</div>
+		</div>
+<script>
+	$( function() {
+		$( "#sortable" ).sortable({
+			cursor: "move",
+			handle: ".table_drag_icon",
+		});
+		$( "#sortable" ).disableSelection();
+	} );
+</script>

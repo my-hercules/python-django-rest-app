@@ -1,0 +1,63 @@
+{%load staticfiles%}
+<script type="text/javascript">
+	$("#progress-div").hide();
+	set_nav_active("dashboard");
+</script>
+<div class = "dashboard_left">
+	<div class = "dashboard_left_top">
+		<div class = "dashboard_left_photo"><img src="/{{user.profile.profile_pic}}" width="100%" height="100%" style = "border-radius:10px;" id = "id_profile_image"></div>
+		
+		<div class = "dashboard_left_content">
+			<div class = "profile-overview-name">{{user.profile.first_name}} {{user.profile.last_name}}</div>
+			<div class = "profile-overview-location">{{user.profile.location}}</div>
+			<!--<div class = "profile-overview-company">{{user.profile.current_role}} @ {{user.profile.company_name}}</div>!-->
+		</div>
+		<div class = "dashboard_left_skill">
+			<div class = "image-profile"></div>
+			<div class = "text-large">{{user.profile.location}}</div>
+			<div class = "top-margin-small"></div>
+			<div class = "new-line image-company"></div>
+			<div class = "dashboard-font">{{user.profile.company_name}}</div>
+			<div class = "top-margin-small"></div>
+			<div class = "new-line image-location"></div>
+			<div class = "dashboard-font">{{user.profile.current_role}}</div>
+		</div>
+	</div>
+	<div class = "dashboard_left_content">
+		<div class = "dashboard-job">
+			<div class = "dash-left">Jobs</div>
+			<div class = "dashboard-job-plus right-float"></div>
+		</div>
+		<div class = "dashboard-active top-margin-small">
+			<div class = "dash-left">Active orders</div>
+			<div class = "right-float">{{user.tborder_set|length}}</div>
+		</div>
+		<div class = "new-line dashboard-font top-margin-small">
+			<div class = "dash-left">Inactive orders</div>
+			<div class = "right-float">0</div>
+		</div>
+		<div class = "dashboard-font top-margin-small">
+			<div class = "dash-left">Cancelled</div>
+			<div class = "right-float">0</div>
+		</div>
+		<div class = "dashboard-font top-margin-small">
+			<div class = "dash-left">Closed orders</div>
+			<div class = "right-float">0</div>
+		</div>
+		<div class = "dashboard-font top-margin-small">
+			<div class = "dash-left">Replacement orders</div>
+			<div class = "right-float">0</div>
+		</div>
+		<div class = "dashboard-font top-margin-small">
+			<div class = "dash-left">Disputed</div>
+			<div class = "right-float">0</div>
+		</div>
+		<div class = "dashboard-font top-margin-small">
+			<div class = "dash-left">All</div>
+			<div class = "right-float">{{user.tborder_set|length}}</div>
+		</div>
+	</div>
+</div>	
+<div class = "dashboard_right" id = "dashboard_content">
+	{%include "signup/ajax/ajax_dash_overview.html"%}
+</div>

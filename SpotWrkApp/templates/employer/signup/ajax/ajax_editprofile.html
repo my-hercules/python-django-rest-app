@@ -1,0 +1,47 @@
+{%load staticfiles%}
+
+		<div id = "pro_edit">
+			<div class = "col-sm-6">
+				{{profileform.first_name}}
+				<!-- <input id = "pro_first" type = "text" name = "first_name" placeholder = "First Name" value="{{ user.first_name }}"> -->
+			</div> 
+			<div class = "col-sm-6">
+				{{profileform.last_name}}
+				<!-- <input id = "pro_last" type = "text" name = "last_name" placeholder = "Last Name" value="{{ user.last_name }}"> -->
+			</div>
+			<div class = "col-sm-12">
+				{{profileform.location}}
+				<!-- <input id = "pro_loc" type = "text" name = "location" placeholder = "Location" value="{{ user.profile.location }}"> -->
+				<script>set_autocomplete("id_location","{%static "lists/locations.txt"%}")</script>
+			</div>
+		</div>
+		<div id = "user_skill_tag">
+			<div class = "col-sm-12">
+				{{profileform.skill}}
+				<!-- <input value="{{ user.profile.skill }}" id = "skill" type = "text" placeholder = "Your Skills"> -->
+			</div>
+			<input id = "temp_skill" value = "{{user.profile.skill}}" name = "skill" type="text" hidden>
+			<script>
+			set_tag_editor('#skill',"#temp_skill{{exp.id}}",'Skills','{%static "lists/skills.txt"%}','#user_skill_tag','False');
+			/*$('#skill').tagEditor({
+			    placeholder: 'Your Skills',
+			    onChange: function(field, editor, tags) {
+			       $("#temp_skill{{exp.id}}").val(tags.length ? tags.join(', ') : '----');
+			    },
+			});*/
+			</script>
+		</div>
+		<div class = "col-sm-12" style = "padding-top:0px">
+			<div class = "dlg-content-social-facebook"></div>
+			<div class = "dlg-content-social-input">
+				<!-- <input id = "pro_face" value="{{ user.profile.social_facebook }}" type = "text" name = "facebook_address" placeholder = "www.facebook.com/??????"> -->
+				{{profileform.social_facebook}}
+			</div>
+		</div>
+		<div class = "col-sm-12">
+			<div class = "dlg-content-social-linkedin"></div>
+			<div class = "dlg-content-social-input">
+				<!-- <input id = "pro_link" type = "text" value="{{ user.profile.social_linkedin }}" name = "linkedin_address" placeholder = "www.linkedin.com/??????"> -->
+				{{profileform.social_linkedin}}
+			</div>
+		</div>

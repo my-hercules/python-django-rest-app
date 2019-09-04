@@ -1,0 +1,20 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="google-site-verification" content="bcqZQmo98grY88dfTbPhGRO5IFpZKpomfRhhO55Moy8" />
+	<title>{% block title %}{% endblock %}</title>
+	{% block css %}{% endblock %}
+	{% block js %}{% endblock %}
+</head>
+<style>
+</style>
+<body>
+	{% block header %}{% endblock %}
+	
+	{% block content %}{% endblock %}
+
+	{% block footer %}{% endblock %}
+</body>
+
+</html>

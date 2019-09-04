@@ -1,0 +1,44 @@
+{% load staticfiles %}	
+		<div id = "pro_edit">
+			<div class = "col-sm-6">
+				<input id = "pro_first" type = "text" name = "first_name" placeholder = "First Name" value="{{ user.profile.first_name }}">
+			</div> 
+			<div class = "col-sm-6">
+				<input id = "pro_last" type = "text" name = "last_name" placeholder = "Last Name" value="{{ user.profile.last_name }}">
+			</div>
+			<div class = "col-sm-12">
+				<input id = "pro_loc" type = "text" name = "location" placeholder = "Location" value="{{ user.profile.location }}">
+			</div>
+		</div>
+		<div id = "user_skill_tag">
+			<div class = "col-sm-12">
+				<input value="{{ user.profile.skill }}" id = "skill" type = "text" placeholder = "Your Skills">
+			</div>
+			<input id = "temp_skill" value = "{{user.profile.skill}}" name = "skill" type="text" hidden>
+			<script>
+			set_tag_editor('#skill',"#temp_skill{{exp.id}}",'Skills','{%static "lists/skills.txt"%}');
+			</script>
+		</div>
+		{% if user.profile.is_company == True %}
+		<div id = "company_div" >
+			<div class = "col-sm-12" style = "margin-top:-10px!important">
+				<input name = "company_name" value = "{{user.profile.company_name}}" id = "pro_company" type = "text" placeholder = "Pre filled Company Name">
+			</div>
+			<div class = "col-sm-12">
+				<input name = "current_role" value = "{{user.profile.current_role}}" id = "pro_role" type = "text" placeholder = "Current Role">
+			</div>
+		</div>
+		{%endif%}
+		
+			<div class = "col-sm-12">
+				<div class = "dlg-content-social-facebook"></div>
+				<div class = "dlg-content-social-input">
+					<input id = "pro_face" value="{{ user.profile.social_facebook }}" type = "text" name = "facebook_address" placeholder = "www.facebook.com/??????">
+				</div>
+			</div>
+			<div class = "col-sm-12">
+				<div class = "dlg-content-social-linkedin"></div>
+				<div class = "dlg-content-social-input">
+					<input id = "pro_link" type = "text" value="{{ user.profile.social_linkedin }}" name = "linkedin_address" placeholder = "www.linkedin.com/??????">
+				</div>
+			</div>

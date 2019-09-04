@@ -1,0 +1,103 @@
+{% load staticfiles %}
+    <!-- Navigation -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <img class = "header-brand" src = "{% static "img/employer/top-logo.png" %}"/>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="hidden">
+                            <a href="#page-top"></a>
+                        </li>
+                        <li>
+                            <a href="#portfolio">How it works</a>
+                        </li>
+                        <li>
+                            <a href="#about">Product</a>
+                        </li>
+                        <li>
+                            <a href="#">Pricing</a>
+                        </li>
+                        <li>
+                            <button class="btn gray-button top_button" onclick = "location.href ='/home';">FOR RECRUITERS</button>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+ {%if status_msg is not None%}
+<div class="notify"><span id="notifyType" class=""></span></div>
+<script>
+    $(".notify").toggleClass("active");
+    $("#notifyType").toggleClass("success");
+  
+    setTimeout(function(){
+        $(".notify").removeClass("active");
+        $("#notifyType").removeClass("success");
+    },5000);
+</script>
+{%endif%}
+<style>
+
+
+.button{  
+  float:left;
+  width:200px;
+  padding:20px 30px;
+  margin:30px;
+  text-align:center;
+  font-weight:bold;
+  cursor:pointer;
+  transition:background .5s;
+}
+
+#success{
+  background:#03a679;
+  color:#f0f0f0;  
+}
+
+#failure{
+  background:#ff3939;
+  color:#f0f0f0;  
+}
+
+.notify{  
+  position:absolute;
+  top:0px;
+  width:100%;
+  height:0;  
+  box-sizing:border-box;
+  color:white;  
+  text-align:center;
+  background:rgba(0,0,0,.6);
+  overflow:hidden;
+  box-sizing:border-box;
+  transition:height .2s;
+}
+
+#notifyType:before{
+  display:block;
+  margin-top:15px; 
+  
+}
+
+.active{  
+  height:50px;
+}
+
+.success:before{
+  Content:"{{status_msg}}";
+}
+
+</style>

@@ -1,0 +1,112 @@
+{% load staticfiles %}
+<header>
+    <div class = "main-content">
+        <div class = "left-part">
+            <div class = "text-advertise">
+                <span class = "text-bold">Stop</span> finding candidates.<br><span class = "text-bold">Start</span> freelancing top recruiters.
+            </div>
+            <div class = "text-advertise-2">
+                The easiest way to find the best <br> recruiters who will work for you.
+            </div>
+            <div class = "signup-botton row">
+                <button data-toggle="modal" onclick="nextTab(1);setType('Company');" data-target="#modal1" class="btn blue-button col-sm-3 btn-sign">SIGN UP</button>
+                <button data-toggle="modal" onclick="nextTab(2)" data-target="#modal1" class="btn white-button col-sm-3 btn-sign">SIGN IN</button>
+            </div>
+        </div>
+        <div class = "right-part">
+            <img class ="right-image1" src = "{% static "img/employer/background (1).png" %}">
+            <img class ="right-image2" src = "{% static "img/employer/background (3).png" %}">
+        </div>
+    </div>
+</header>
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-popup modal-active">
+                <div class = "testbox signup " id = "signup">
+                    <div class = "stripe-blue-left" id = "stripe-blue-left"></div>
+                    <div class="row" id = "signup-header">
+                        <div class="col-lg-12 text-center ">
+                            <h2 onclick = "nextTab(1)" class = "h2-signin" id = "h2-signup">Sign Up</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class = "testbox signin sign-margin sign-margin-right"  id  = "signin">
+                    <div class = "stripe-blue-right" id = "stripe-blue-right"></div>
+                    <div class="row" id = "signin-header">
+                        <div class="col-lg-12 text-center">
+                            <h2 onclick="nextTab(2)" class = "h2-signup" id = "h2-signin">Sign In</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class = "half-box">
+                    <div class="row signup-content sign-content" id = "signup-content">
+                        <div class="col-lg-8 col-lg-offset-2 signform">
+                            <form id = "signform" action="{% url 'employer_signup' %}" method="post">
+                                {% csrf_token %}
+                                <div class="row control-group">
+                                    <!--<div id = "text-email" class="form-group col-xs-12 floating-label-form-group controls">
+                                        <input type="email" class="form-control" name = "txtemail" placeholder="Email" id="email" required title="Please enter your email address.">
+                                        <p class="help-block text-danger"></p>
+                                    </div>-->
+                                    <div id = "text-email" class="form-group col-xs-12 floating-label-form-group controls">
+                                        <label for="{{ form.email.id_for_label }}" hidden>Email
+                                              <span class="red">*</span>
+                                        </label>
+                                        {{ form.email}}
+                                        {% if form.email.errors %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                            <span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span>
+                                            <label class='err_msg' style="font-family: Segoe_Print !important;color:red;display: -webkit-inline-box;">&nbsp;{{ form.email.errors }}</label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row control-group">
+                                    <div id = "text-password" class="form-group col-xs-12 floating-label-form-group controls">
+                                        <label for="{{ form.password2.id_for_label }}" hidden>Password
+                                              <span class="red">*</span>
+                                        </label>
+                                        {{ form.password}}
+                                        {% if form.password.errors %}
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 error_msg padd_zero">
+                                            <span style='font-size:20px;'><i class='glyphicon glyphicon-remove-circle' style='top: 5px !important;' /></span>
+                                            <label class='err_msg' style="font-family: Segoe_Print !important;color:red;display: -webkit-inline-box;">&nbsp;{{ form.password.errors }}</label>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <!--pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" title="Your password must be at least 6 characters as well as contain at least one uppercase, one lowercase, and one number."!-->
+                                </div>
+                                <br>
+                                <div id="success"></div>
+                                <div class="row">
+                                    <div class="form-group col-xs-12 text-center">
+                                        <button id = "sign-submit-button" type="submit" name = "signup" class="btn blue-button  btn-signup">SIGN UP</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>                       
+                <div class = "stick">
+                </div>
+                <div class = "half-box">
+                    <div class="row signin-content " id = "signin-content">
+                        <div class = "container-fluid">
+                            <div class="row social-link">
+                                <div class="col-sm-12">
+                                    <a href = "{% url 'social:begin' 'facebook' %}" class = "btn btn-lg btn-social-facebook"><span><img src="{% static "img/spotwrk/fb-art.png" %}">FACE BOOK</span></a>
+                                </div>
+                                <div class="col-sm-12">
+                                    <a href = "{% url 'social:begin' 'linkedin-oauth2' %}" class = "col-xs-12 btn btn-lg btn-social-linkedin"><img src="{% static "img/spotwrk/li_logo.png" %}">LINKEDIN</a>
+                                </div>
+                                <div class="col-sm-12">
+                                    <a href = "{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}" class = "col-xs-12 btn btn-lg btn-social-google"><img src="{% static "img/spotwrk/g_logo.png" %}">GOOGLE</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

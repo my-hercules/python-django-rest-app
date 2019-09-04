@@ -1,0 +1,29 @@
+{%load staticfiles%}
+<div style = "float:left;width:37%;height:85%;margin-top:10px;" class = "text-center">
+{{ serviceformset.management_form }}
+{% for form in serviceformset %}
+{% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+<div class = "row" id = "service_box_{{forloop.counter}}">
+	<div class = "col-sm-12" style = "position:relative">
+		<!--<input id = "pro_loc" type = "text" name = "location" placeholder = "Product/Service" value="{{ user.profile.location }}"> -->
+		{{form.name}}
+		<div class = "red_delete_btn" style = "position:absolute;right:-20px;" onclick = "on_service_delete({{ forloop.counter }},'{{form.instance.id}}');"></div>
+		<div hidden>{{form.DELETE}}</div>
+	</div>
+	<div class = "col-sm-12">
+		<!-- <textarea id = "pro_loc" type = "text" name = "location" placeholder = "Product/Service description" value="{{ user.profile.location }}" style = "height:50px;resize:none"></textarea> -->
+		{{form.description}}
+		<script>
+			$("#{{form.description.auto_id}}").css("height","50px");
+		</script>
+	</div>
+	<div class = "col-sm-2"></div>
+</div>
+<script>
+	if($("#id_form-{{forloop.counter|add:-1}}-DELETE").attr("checked"))
+	{
+		$("#service_box_{{forloop.counter}}").hide();
+	}
+</script>
+{% endfor %}
+</div>

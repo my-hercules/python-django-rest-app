@@ -1,0 +1,64 @@
+{%load staticfiles%}
+				<div class = "margin-control"><span class = "text-small">This information will help recruiters to understand your requirements in detail</span></div>
+					<div class = "dlg-skill-content-box">
+					
+				        <div class = "row">
+				        	<div class = "col-sm-12">
+				        		{{companyform.industry}}
+				        	</div>
+				        	<div class = "col-sm-12">
+								<!-- <input id = "pro_loc" type = "text" name = "location" placeholder = "Company Name" value="{{ user.profile.location }}"> -->
+								{{companyform.company_name}}
+							</div>
+							<div class = "col-sm-12">
+								<!-- <textarea id = "pro_loc" type = "text" name = "location" placeholder = "Company description" value="{{ user.profile.location }}" style = "height:50px;resize:none" ></textarea> -->
+								{{companyform.company_description}}
+								<script>
+									$("#id_company_description").css("height","50px");
+								</script>
+							</div>
+				        	<div class = "col-sm-12" style = "margin-top:-3px;">
+				        		<div id = "company_skill_temp">
+				        		{{companyform.company_skill}}
+				        		</div>
+								<!-- <input id = "pro_loc" type = "text" name = "location" placeholder = "Skills related to your company" value="{{ user.profile.location }}"> -->
+								<script>
+								set_tag_editor('#id_company_skill',"#id_company_skill",'Skills related to your company','{%static "lists/skills.txt"%}','#company_skill_temp','False');
+								</script>
+							</div>
+							<div class = "col-sm-12" style = "padding-top:0px;">
+								<div id = "company_location_temp">
+				        		{{companyform.hired_location}}
+				        		</div>
+								<script>
+								set_tag_editor('#id_hired_location',"#id_hired_location",'Locations in where your company hires most','{%static "lists/locations.txt"%}','#company_location_temp','False');
+								</script>
+							</div>
+							<div class = "col-sm-12" style = "margin-top:-10px;">
+								<!-- <input id = "pro_loc" type = "text" name = "location" placeholder = "http://www.yourwebsite.com" value="{{ user.profile.location }}"> -->
+								{{companyform.company_site}}
+							</div>
+						</div>
+						<div class = "margin-control"><span class = "text-small">Employee count</span></div>
+						<div class = "dlg-skill-content-list">
+							<div id = "employee-num-dropdown">
+								{{companyform.employee_count}}
+								<!-- <select name = "experience[{{exp.id}}][candidate_count]" value = "{{exp.candidate_number}}">
+								{% for c in '0123456789' %}
+								  <option value="{{c}}" {% if exp.candidate_number|stringformat:"i" == c %} selected {% endif %}>{{c}}</option>
+								{% endfor %}
+								</select> -->
+							</div>
+					    </div>
+					</div>
+				<div class = "dlg-stick top-margin" style="height:85%;"></div>
+
+				<div id = "service_list" style = "margin-top:42px">
+					{% include "employer/signup/ajax/ajax_servicelist.html" %}
+				</div>
+				<button class = "top-margin-small toggle-red-add" onclick = "new_service()"></button>
+
+<script>
+
+$('select').prettyDropdown();
+</script>

@@ -1,0 +1,226 @@
+<script>
+	set_nav_active("order");
+</script>
+<form action = "{%url 'ajax_savepayment'%}" role = "form" method = "post" id = "payment_form">
+{%csrf_token%}
+<div class = "container content-box">
+		<div class = "payment_banner bottom-margin">Banner</div>
+		<span class = "text-header bottom-margin-medium" >PAYMENT</span>
+		<div class = "payment-menu top-margin-medium">
+			<div id = "payment-list-country">
+				<select name = "country">
+				  <option value="COUNTRY" {% if payment.country == "COUNTRY" %} selected {% endif %}>COUNTRY</option>
+				  <option value="INDIA" {% if payment.country == "INDIA" %} selected {% endif %}>INDIA</option>
+				  <option value="UNITED STATES" {% if payment.country == "UNITED STATES" %} selected {% endif %}>UNITED STATES</option>
+				</select>
+			</div>
+		</div>
+		<div class = "payment-content">
+			<div class = "payment-content-info top-margin-small">
+				<div><span class = "text-medium">Personal Information</span></div>
+				<div class = "row top-margin-small">
+					<div class = "col-sm-6">
+						<!-- <input type = "text" name = "first_name" value = "{{payment.first_name}}" placeholder = "First Name"> -->
+						{{paymentform.first_name}}
+					</div>
+					<div class = "col-sm-6">
+						<!-- <input type = "text" name = "last_name" value = "{{payment.last_name}}" placeholder = "Last Name"> -->
+						{{paymentform.last_name}}
+					</div>
+					<div class = "col-sm-12">
+						<!-- <input type = "text" name = "address1" value = "{{payment.address1}}" placeholder = "Address Line 1"> -->
+						{{paymentform.address1}}
+					</div>
+					<div class = "col-sm-12">
+						<!-- <input type = "text" name = "address2" value = "{{payment.address2}}" placeholder = "Address Line 2"> -->
+						{{paymentform.address2}}
+					</div>
+					<div class = "col-sm-7 top-margin-small">
+						<div id = "payment-list-city">
+							<select value = "" name = "city">
+							  <option value="CITY/TOWN"  {% if payment.city == "CITY/TOWN" %} selected {% endif %}>CITY/TOWN</option>
+							  <script>
+							  setRegions();
+							  </script>
+							</select>
+						</div>
+				            <div class = "text-medium center-text" hidden>CITY/TOWN</div>
+			        </div>
+					<div class = "col-sm-5 top-margin-small">
+						<div id = "payment-list-state">
+				            <select  value = "" name = "state">
+							  <!--<option value="STATE" {% if payment.state == "STATE" %} selected {% endif %}>STATE</option>-->
+							  <option value="INDIA" {% if payment.state == "INDIA" %} selected {% endif %}>INDIA</option>
+							  <option value="UNITED STATES" {% if payment.state == "UNITED STATES" %} selected {% endif %}>US</option>
+							</select>
+						</div>
+				            <div class = "text-medium center-text" hidden>INDUSTRY 2</div>
+			        </div>
+			        <div class = "col-sm-12">
+						<!-- <input type = "text" name = "zipcode" placeholder = "ZIPCODE/PINCODE" value = "{{payment.zipcode}}"> -->
+						{{paymentform.zipcode}}
+					</div>
+				</div>
+			</div>
+			<div class = "payment-content-summary top-margin-small left-margin-large">
+				<div><span class = "text-medium">Summary</span></div>
+				<div class = "dlg-v-stick top-margin-small"></div>
+				<div class = "new-line top-margin-small text-small left-float">User Verification</div>
+				<div class = "text-small right-float top-margin-small">$400.00</div>
+				<div class = "new-line top-margin-small text-small left-float">Offer Discount</div>
+				<div class = "top-margin-small text-small right-float">$0.00</div>
+				<div class = "new-line top-margin-small text-small left-float">Gift Card Discount</div>
+				<div class = "top-margin-small text-small right-float">$0.00</div>
+				<div class = "dlg-v-stick top-margin-small"></div>
+				<div class = "green-font top-margin-small text-small left-float">Total</div>
+				<div class = "green-font top-margin-small text-small right-float">$400.00</div>
+				<!-- <input class = "top-margin-small" type = "text" name = "invitecode" placeholder = "Invite Code"> -->
+				<!-- <input class = "top-margin-small" type = "text" name = "invitefriend" placeholder = "Invite a friend"> -->
+				<div class = "top-margin-small new-line left-float full-width">
+					{{paymentform.invitecode}}
+				</div>
+				<div class = "top-margin-small new-line left-float full-width">
+					{{paymentform.invite_friend}}
+				</div>
+			</div>
+			<div class = "dlg-v-stick top-margin-small"></div>
+			<div class = "payment-content-method" style = "display:inline-block">
+				<span class = "text-medium" style = "width:100%;display:inline-block">Payment Method</span>
+				<ul id="accordion" class="accordion" style = "display:inline">
+				  <li>
+				    <div class="link text-small"><i class="fa fa-database"></i>
+						<span class = "font-payment-method">Paypal</span>
+						<div class = "payment-img right-float"></div>
+						<i class="fa fa-chevron-down">
+						</i>
+					</div>
+				    <div class = "submenu">
+				    	<div class = "pay_creditcard_div">
+				    		<div class = "row">
+					    		<div class = "col-sm-12">
+					    			<!-- <input placeholder = "Card Number" name = "pay_pal_cardnumber" value="{{payment.pay_pal_cardnumber}}"> -->
+					    			{{paymentform.pay_pal_cardnumber}}
+					    		</div>
+					    		<div class = "col-sm-3 top-margin-small">
+					    			<!-- <input placeholder = "Code" name = "pay_pal_code" value="{{payment.pay_pal_code}}"> -->
+					    			{{paymentform.pay_pal_code}}
+					    		</div>
+					    		<div class = "col-sm-9 top-margin-small">
+					    			<!-- <input placeholder = "Valid through MM/YY" name = "pay_pal_valid" value="{{payment.pay_pal_valid}}"> -->
+					    			{{paymentform.pay_pal_valid}}
+					    		</div>
+					    		<div class = "col-sm-12">
+					    			<!-- <input placeholder = "Name on card" name="pay_pal_nameoncard" value="{{payment.pay_pal_nameoncard}}"> -->
+					    			{{paymentform.pay_pal_nameoncard}}
+					    		</div>
+					    	</div>
+				    	</div>
+				    </div>
+				  </li>
+				  <li>
+				    <div class="link"><i class="fa fa-code"></i>
+						<span class = "font-payment-method">Credit Card</span>
+						<div class = "payment-img2 right-float"></div>
+						<div class = "payment-img3 right-float"></div>
+						<div class = "payment-img4 right-float"></div>
+				    <i class="fa fa-chevron-down"></i></div>
+				    <div class = "submenu">
+				    	<div class = "pay_creditcard_div">
+				    		<div class = "row">
+					    		<div class = "col-sm-12">
+					    			<!-- <input placeholder = "Card Number" name = "pay_credit_cardnumber" value="{{payment.pay_credit_cardnumber}}"> -->
+					    			{{paymentform.pay_credit_cardnumber}}
+					    		</div>
+					    		<div class = "col-sm-3 top-margin-small">
+					    			<!-- <input placeholder = "Code" name = "pay_credit_code" value="{{payment.pay_credit_code}}"> -->
+					    			{{paymentform.pay_credit_code}}
+					    		</div>
+					    		<div class = "col-sm-9 top-margin-small">
+					    			<!-- <input placeholder = "Valid through MM/YY" name = "pay_credit_valid" value="{{payment.pay_credit_valid}}"> -->
+					    			{{paymentform.pay_credit_valid}}
+					    		</div>
+					    		<div class = "col-sm-12">
+					    			<!-- <input placeholder = "Name on card" name="pay_credit_nameoncard" value="{{payment.pay_credit_nameoncard}}"> -->
+					    			{{paymentform.pay_credit_nameoncard}}
+					    		</div>
+					    	</div>
+				    	</div>
+				    </div>
+				  </li>
+				  <li>
+				    <div class="link"><i class="fa fa-mobile"></i>
+						<span class = "font-payment-method">Debit Card</span>
+				    <i class="fa fa-chevron-down"></i></div>
+				    <div class = "submenu">
+				    	<div class = "pay_creditcard_div">
+				    		<div class = "row">
+					    		<div class = "col-sm-12">
+					    			<!-- <input placeholder = "Card Number" name = "pay_debit_cardnumber" value="{{payment.pay_debit_cardnumber}}"> -->
+					    			{{paymentform.pay_debit_cardnumber}}
+					    		</div>
+					    		<div class = "col-sm-3 top-margin-small">
+					    			<!-- <input placeholder = "Code" name = "pay_debit_code" value="{{payment.pay_debit_code}}"> -->
+					    			{{paymentform.pay_credit_code}}
+					    		</div>
+					    		<div class = "col-sm-9 top-margin-small">
+					    			<!-- <input placeholder = "Valid through MM/YY" name = "pay_debit_valid" value="{{payment.pay_debit_valid}}"> -->
+					    			{{paymentform.pay_credit_valid}}
+					    		</div>
+					    		<div class = "col-sm-12">
+					    			<!-- <input placeholder = "Name on card" name="pay_debit_nameoncard" value="{{payment.pay_debit_nameoncard}}"> -->
+					    			{{paymentform.pay_credit_nameoncard}}
+					    		</div>
+					    	</div>
+				    	</div>
+				    </div>
+				  </li>
+				</ul>
+				<div class = "payment-submit-button">
+					<div class = "top-margin-medium left-float"><span class = "font-payment-method text-medium">Back</span></div>
+					<button onclick =  "on_save_payment()" type = "button" class = "top-margin-medium btn green-button right-float payment-submit-button-checkout">CHECKOUT</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+	<script>
+	function on_save_payment(){
+		$.ajax({
+	        url: "{% url 'ajax_savepayment' %}",
+	        data: $("#payment_form").serialize(),
+		    type: 'post',
+	        success: function (data) {
+	          location.href = "/employer/main/dashboard";
+	        }
+	    });
+	}
+	$("#progress_div").show();
+	progress_setpos("payment");
+	$('select').prettyDropdown();
+	$(function() {
+		var Accordion = function(el, multiple) {
+			this.el = el || {};
+			this.multiple = multiple || false;
+
+			// Variables privadas
+			var links = this.el.find('.link');
+			// Evento
+			links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+		}
+
+		Accordion.prototype.dropdown = function(e) {
+			var $el = e.data.el;
+				$this = $(this),
+				$next = $this.next();
+
+			$next.slideToggle();
+			$this.parent().toggleClass('open');
+
+			if (!e.data.multiple) {
+				$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+			};
+		}	
+
+		var accordion = new Accordion($('#accordion'), false);
+	});
+	</script>

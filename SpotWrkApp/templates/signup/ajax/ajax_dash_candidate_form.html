@@ -1,0 +1,75 @@
+{%load staticfiles%}
+
+	<div class = "border-blue" style = "background:white;font-family:Avenir;">
+		<div style = "width:100%;padding:5% 10%;">
+			<p class = "profile-overview-name full-width bottom-margin-large text-center">
+				CANDIDATE DETAILS
+			</p>
+			<div class = "left-float">
+				<div class = "dlg_candidate_item">
+					<img class = "dlg_candidate_img" src="{%static 'img/employer/candidate_info.png'%}">
+					<span class = "table_detail_loc_font text-bold" style = "padding-top:3px;">{{candidate.candidate_fname}} {{candidate.candidate_fname}}</span>
+				</div>
+				<div class = "dlg_candidate_item">
+					<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_location.png"%}">
+					<span class = "table_detail_loc_font">{{candidate.candidate_location}}</span>
+				</div>
+				<div class = "dlg_candidate_item">
+					<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_role.png"%}">
+					<span class = "table_detail_loc_font">{{candidate.candidate_role}}</span>
+				</div>
+				<div class = "dlg_candidate_item">
+					<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_company.png"%}">
+					<span class = "table_detail_loc_font">{{candidate.candidate_company}}</span>
+				</div>
+				<div class = "dlg_candidate_item">
+					<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_skill.png"%}">
+					<span class = "table_detail_loc_font" id = "modal_skill"></span>
+					<script>
+						var str = "{{candidate.candidate_skill}}";
+						newfilter = str.split(",");
+						$.each(newfilter,function(no,value){
+							if(value != ""){
+								$("#modal_skill").append("<div class = 'skill-tag-overview' style= 'margin-top:0px'>"+value+"</div>");
+							}
+						});
+					</script>
+				</div>
+				<div class = "dlg_candidate_item" style = "width:100%;">
+					<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_email.png"%}">
+					<span class = "table_detail_loc_font">{{candidate.candidate_email}}</span>
+					<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_phone.png"%}">
+					<span class = "table_detail_loc_font">+{{candidate.candidate_phone}}</span>
+				</div>
+				<div class = "dlg_candidate_item" style = "margin-left:50px">
+					<div class = "dlg-content-social-linkedin"></div>
+					<span class = "table_detail_loc_font left-margin-small">{{candidate.candidate_linkedin}}</span>
+				</div>
+				<div class = "dlg_candidate_item" style = "margin-left:50px">
+					<div class = "dlg-content-social-facebook"></div>
+					<span class = "table_detail_loc_font left-margin-small">{{candidate.candidate_facebook}}</span>
+				</div>
+			</div>
+			<div class = "right-float" style = "height:55%;margin-right:80px;">
+				<div class = "dlg_candidate_item" style = "height:100%;width:100%">
+					<div style = "width:100%;float:left;padding-left:30%" class = "">
+						<p class = "pdf_img"></p>
+						<span class = "text-tiny">{{candidate.file_candidate}}</span>
+						<div style = "position:relative;width:52px;margin-top:12px;"><span class = "download_btn"></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		function show_candidate(pID){
+			$.ajax({
+		        url: "{% url 'ajax_recruiter_dash_candidate' %}",
+		        data: { 'id' : pID },
+			    type: 'post',
+		        success: function (data) {
+		          $("#candidate_modal").html(data);
+		        }
+		    });
+		}
+	</script>

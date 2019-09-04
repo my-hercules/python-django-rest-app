@@ -1,0 +1,176 @@
+		{% for candidate in candidates %}
+			{%if candidate.id != candi_edit.id%}
+			<div class = "candidate_info" id = "candidate_info_{{candidate.id}}">
+				<span class = "text-large blue-font">Candidate details saved. Candidates Name:{{candidate.candidate_firstname}} {{candidate.candidate_lastname}}</span>
+				<div class = "dlg-toggle-menu right-float">
+					<div class = "toggle-edit left-float right-margin-small" onclick = "candidate_toggle({{candidate.id}},'edit');">
+					</div>
+					<div class = "toggle-delete right-float right-margin-small" onclick = "candidate_toggle({{candidate.id}},'delete');">
+					</div>
+				</div>
+			</div>
+			{%endif%}
+		{% endfor %}
+	<form id = "candidate_form"  action="/createcandidate/{{experience.id}}/" method = "post" enctype="multipart/form-data" role = "form">{% csrf_token %}
+		<input type = "text" name = "candi_id" hidden value="{{candi_edit.id}}">
+		<div class = "color-dlg border-blue">
+			<div class = "dlg-skill-content">
+				<div><span class = "text-medium">ADD CANDIDATES</span></div>
+				<div class = "margin-control"><span class = "text-small">Add candidates in the {{experience.industry}} with {{experience.skill}}</span></div>
+				<div class = "candidate-job">
+					<div class = "candidate-intro">
+						<div class = "candidate-intro-image-job"></div>
+						<div class = "container-fluid text-center"><span class = "text-small">About Job</span></div>
+					</div>
+					<div class = "candidate-content">
+				        <div style = "width:55%">
+							<textarea name = "skill" placeholder = "Describe Job" autofocus wrap = "hard">{{candi_edit.description}}</textarea>
+							<div class = "margin-control"><span class = "text-small">or</span></div>
+							<input type="file" id="myfile_JD" name = "file_JD" style = 'visibility:hidden;height:0px'>
+							<a class = "btn blue-button" onclick="document.getElementById('myfile_JD').click();">UPLOAD JD</a>
+						  	<div id = "fake_JD" class = "text-small"></div>
+						</div>
+					</div>
+				</div>
+				<div class="dlg-v-stick"></div>
+				<div class = "candidate-job">
+					<div class = "candidate-intro">
+						<div class = "candidate-intro-image-client"></div>
+						<div class = "container-fluid text-center"><span class = "text-small">About Client</span></div>
+					</div>
+					<div class = "candidate-content">
+				        <div class = "candidate-content-60">
+							<input name = "client_name" id = "client_name" type = "text" placeholder = "Client name" value="{{candi_edit.client_name}}">
+						</div>
+						<div class = "candidate-content-35">
+							<input id = "isAnonymous1" onclick="onAnonymous('client_name','1')" style = "border:0.5px solid #4b74ff;width:15px;height:15px;" type = "checkbox" value="Anonymous"><span style ="margin-top:1px;" class = "text-small">Anonymous</span>
+						</div>
+						<div class = "candidate-content-60">
+							<textarea name = "client_description" type = "text" placeholder = "Client Description, Product/Service">{{candi_edit.client_description}}</textarea>
+						</div>
+						<div class = "candidate-content-35">
+							<input name = "client_site" type = "text" placeholder = "http://www.company.com" value = "{{candi_edit.client_site}}">
+						</div>
+						<div style="float:left;margin-top:-5px" class = "new-line"><span class = "text-tiny">Add fields seperated by commas.</span></div>
+					</div>
+
+				</div>
+				<div class="dlg-v-stick"></div>
+				<div class = "candidate-job">
+					<div class = "candidate-intro">
+						<div class = "candidate-intro-image-candidate"></div>
+						<div class = "container-fluid text-center"><span class = "text-small">About Candidate</span></div>
+					</div>
+					<div>
+					<div class = "candidate-content" id = "new_candidate">
+					{%for candidateinfo in candidateinfos%}
+					        <div class = "candidate-content-60">
+								<input name = "candidate_firstname[{{candidateinfo.id}}]" style = "width:48%;margin-right:10px;" type = "text" placeholder = "First name" value="{{candidateinfo.firstname}}">
+								<input name = "candidate_lastname[{{candidateinfo.id}}]" style = "width:48.5%" type = "text" placeholder = "Last name" value="{{candidateinfo.lastname}}" class="bottom-margin">
+
+								<input type = "text" id = "candidate_skill{{candidateinfo.id}}" placeholder = "Skills" value = "{{candidateinfo.skills}}">
+								<input value = "{{candidateinfo.skills}}" name = "candidate_skills[{{candidateinfo.id}}]" id = "temp_candiskill{{candidateinfo.id}}" type ="text" hidden>
+								<script>
+								$('#candidate_skill{{candidateinfo.id}}').tagEditor({
+								    placeholder: 'Skills',
+								    onChange: function(field, editor, tags) {
+								       $("#temp_candiskill{{candidateinfo.id}}").val(tags.length ? tags.join(', ') : '----');
+								    },
+								});
+								</script>
+								<div style=""><span class = "text-tiny">Add fields seperated by commas.</span></div>
+								<div class = "dlg-content-social-linkedin top-margin-10"></div>
+								<div class = "dlg-content-social-input top-margin-10">
+									<input value ="{{candidateinfo.social_linkedin}}" name = "candidate_social_linkedin[{{candidateinfo.id}}]" type = "text" placeholder = "www.linkedin.com/??????">
+								</div>
+							</div>
+							<div style = "float:right;margin-top:20px;width:38%">
+								<div class = "container-fluid">
+									<div class = "candidate-upload"  onclick="document.getElementById('myfile_resume{{candidateinfo.id}}').click();"></div>
+									<!-- <div class = "text-center"><span class = "text-small upload-font">UPLOAD RESUME</span></div> -->
+									<div id = "fake_resume{{candidateinfo.id}}" class = "text-small"></div>
+									<input type="file" id="myfile_resume{{candidateinfo.id}}" name = "candidate_resume[{{candidateinfo.id}}]" hidden style = 'visibility:hidden;height:0px;'>
+									<script>
+										$('#myfile_resume{{candidateinfo.id}}').change(function () {
+										    var a = $('#myfile_resume{{candidateinfo.id}}').val().toString().split('\\');
+										    $('#fake_resume{{candidateinfo.id}}').html(a[a.length -1]);
+										});
+									</script>
+								</div>
+							</div>
+					{%endfor%}
+					</div>
+						<div style = "margin-left:21%">
+							<div onclick  ="on_newinfo({{candi_edit.id}})" class = "button-add top-margin-10 new-line button-add" data-toggle="modal" data-target="#modal1"></div>
+							<div  class = "left-float new-line"><span class = "text-tiny">Add more candidates.</span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class = "dlg-toggle-menu">
+				<div class = "toggle-reset">
+				</div>
+				<div class = "toggle-delete">
+				</div>
+				<button class = "toggle-save border-none" type ="submit" onclick = "candidate_save()"></button>
+			</div>
+		</div>
+	<div class = "container text-center"><a href = "/ajax/profile" onclick = "delete_temp()" class = "btn blue-button text-center" style = "padding-top:18px;width:200px;height:40px;">Done</a></div>
+	</form>
+<script>
+</script>
+
+
+<script>
+	function delete_temp(){
+		$.ajax({
+	        url: '/ajax/delete_tempcandinfo',
+	        type: 'get',
+	        success: function (data) {
+	        }
+	    });
+		
+	}
+	function on_newinfo(pID){
+		$.ajax({
+	        url: '/ajax/new_candidateinfo/'+pID,
+	        type: 'get',
+	        success: function (data) {
+	            $("#new_candidate").append(data);
+	        }
+	    });
+	}
+		$('#myfile_JD').change(function () {
+		    var a = $('#myfile_JD').val().toString().split('\\');
+		    $('#fake_JD').html(a[a.length -1]);
+		});
+
+		set_nav_active("profile");
+		function onAnonymous(pID,pVal)
+		{
+			$("#"+pID).val($("#isAnonymous"+pVal).prop('checked') ? "Anonymous" : "{{candi_edit.client_name}}");
+		}
+		$("#progress_div").show();
+		progress_setpos("profile");
+		function candidate_save()
+		{
+			$("#candidate_form").submit();
+		}
+		function candidate_toggle(pID,pAction)
+		{
+			switch(pAction){
+				case "delete":
+					$.ajax({
+				        url: '/ajax/candidate_delete/'+pID,
+				        type: 'get',
+				        success: function (data) {
+				            $("#candidate_info_"+pID).hide()
+				        }
+				    });
+					break;
+				case "edit":
+					location.href = "/ajax/candidate_edit/"+pID;
+					break;
+			}
+		}
+</script>

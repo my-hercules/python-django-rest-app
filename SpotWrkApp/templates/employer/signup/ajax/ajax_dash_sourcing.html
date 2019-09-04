@@ -1,0 +1,190 @@
+{%load staticfiles%}
+	<div class = "table_list">
+		<div class = "table_header table_header_font">
+			<span class = "table_column_status">&nbsp</span>
+			<span style = "width:43.34%">Client details</span>
+			<div class = "table_v_stick"></div>
+			<span class = "table_column_half">Order details</span>
+		</div>
+		<div class = "table_row" style = "height:auto;align-items:baseline;">
+			<div class = "table_column_status">
+				<span class = "table_status_font text-bold" style = "padding-left:20px">New</span><br>
+				<span class = "table_status_font" style = "padding-left:20px">Today</span><br>
+			</div>
+			<span style = "border-right:solid 0.5px #ecedf4;padding:40px 0px;width:43.34%">
+				<span class = "table_companyname_font">{{order.rec.profile.company_name}}</span><br>
+				<span class = "table_companyloc_font">{{order.rec.profile.location}}</span><br>
+				<div style = "width:60%;float:left;margin-top:10px;">
+					<p class = "table_companyloc_font" style = "overflow:hidden;height:3em;" id = "client_description">
+						{{order.client_description}}
+					</p>
+					<span class = "table_companyloc_font" style = "color:#4b74ff;text-align:right;float:right" id ="btn_readmore" onclick = "on_readmore('client_description');">Read more...</span>
+				</div>
+				<div style = "width:40%;float:left;margin-top:10px">
+					<span class = "table_status_font" style = "width:100%;display:block;padding-left:20px;word-wrap:break-word;">{{order.company_domain}}</span>
+				</div>
+				<img class = "table_user_img new-line left-float" src = "/{{order.rec.profile.profile_pic}}">
+				<div class = "left-float left-margin">
+					<span class = "table_user_font text-bold">{{order.client_name}}</span><br>
+					<span class = "table_user_font">{{user.profile.location}}</span><br>
+				</div>
+			</span>
+			<span class = "table_column_half" style = "display:flex;">
+				<div style = "width:50%;float:left">
+					<span class = "table_category_font">{{order.category}}</span><br><br>
+					<span class = "table_detail_industry_font">{{order.recruiter_order.industry}}</span><br>
+					<span class = "table_detail_loc_font">{{order.recruiter_order.location}}</span><br>
+					<span style = "margin-bottom:0px;margin-top:0px;margin-left:0px;" id = "skill_box{{i}}"></span>
+					<script>
+						var str = "{{order.recruiter_order.skill}}";
+						newfilter = str.split(",");
+						$.each(newfilter,function(no,value){
+							if(value != ""){
+								$("#skill_box{{i}}").append("<div class = 'skill-tag-overview' style= 'margin-top:10px'>"+value+"</div>");
+							}
+						});
+					</script>
+				</div>
+				<div style="width:25%;float:left">
+					<span class = "table_price_font">{{order.recruiter_order.pay_fee_type}}{{order.recruiter_order.pay_flatfee}}</span><br><br>
+					<div class = "order-complete-toggle">
+					<div class = "left-float order-small-toggle-button-orderlevel" style = "background-image:url('{% static "img/spotwrk/New Files/" %}{{order.recruiter_order.experience}}.png')"></div><span class = "left-float text-tiny top-margin left-margin" style = "width:auto;">{{order.recruiter_order.experience}}</span>
+					<div class = "new-line left-float order-small-toggle-button-paytype"></div><span style = "width:auto;" class = "left-float text-tiny top-margin-small left-margin">{{order.recruiter_order.pay_type}}</span>
+					<div class = "new-line left-float order-small-toggle-button-turnaround"></div><span style = "width:auto;" class = "left-float text-tiny top-margin-small left-margin">{{order.recruiter_order.turnaround}}</span>
+					</div>
+				</div>
+				<div style = "width:25%;float:left">
+					<button class = "table_btn_green">VIEW</button>
+					<p class = "table_detail_industry_font top-margin" style = "font-size:14px;width:80%;text-align:center">ACCEPTED</p>
+					<button class = "table_btn_green top-margin" style = "background-color: #6b7c93;">UNDER PROCESS</button>
+					<button class = "table_btn_green top-margin" style = "background-color: #0565c0;">DELIVER</button>
+					<p class = "table_detail_loc_font top-margin text-center" style = "font-size:22px;width:80%">06-Nov</p>
+					<p class = "table_detail_loc_font text-center" style = "font-size:14px;width:80%;">DUE DATE</p>
+				</div>
+			</span>
+		</div>
+	</div>
+	<div class = "table_list top-margin-large">
+		<div class = "table_header table_header_font">
+			<span style = "width:50%;position:relative;padding-left:40px;">Job description<span class = "download_btn"></span></span>
+			<div class = "table_v_stick"></div>
+			<span class = "table_column_half">Must haves</span>
+		</div>
+		<div class = "table_row" style = "height:auto;">
+			<span style = "width:50%;border-right:solid 0.5px #ecedf4;padding:40px 40px;float:left;">
+				<div style = "width:20%;float:left;" class = "">
+					<div style = "width:20%;float:left;margin-left:20px" class = "">
+					<p class = "pdf_img" style = "margin-left:calc(50% - 20px);text-align:center;width:40px;"></p>
+					<p class = "text-tiny top-margin" style = "margin-left:calc(50% - 40px);text-align:center;width:80px;word-wrap:break-word;">{{order.file_JD}}</p>
+				</div>
+				</div>
+				<div style = "width:80%;float:left;">
+					<p id = "job_detail" class = "table_detail_loc_font" style = "overflow:hidden;height:3em;font-size:19px">{{order.job_detail}}</p>
+					<span class = "table_companyloc_font" style = "font-size:18px;color:#4b74ff;text-align:right;float:right" id ="btn_readmore" onclick = "on_readmore('job_detail');">Read more...</span>
+				</div>
+			</span>
+			<span class = "table_column_half" style = "float:left;display:flex">
+				<div style = "width:20%;align-items:center;display:flex" class = "left-float">
+					<div style = "">
+						<p class = "must_img" style=""></p>
+						<span class = "text-tiny">Must haves</span>
+					</div>
+				</div>
+				<div style = "width:80%" class = "left-float">
+					<p class = "table_detail_loc_font" style = "font-size:19px">1. {{order.needed_skill}}</p><br>
+					<p class = "table_detail_loc_font" style = "font-size:19px">2. {{order.needed_hours}}</p><br>
+					<p class = "table_detail_loc_font" style = "font-size:19px">3. {{order.needed_communication}}</p>
+				</div>
+			</span>
+		</div>
+	</div>
+<script>
+	function on_readmore(pID)
+	{
+		dest = $("#"+pID);
+		if(dest.next().html()=='Read more...'){
+			dest.css("height",'auto');
+			dest.next().html("Less");
+		}
+		else{
+			dest.css("height",'3em');
+			dest.next().html("Read more...");
+		}
+	}
+</script>
+<style>
+	#btn_readmore:hover{
+		cursor: pointer;
+	}
+</style>
+
+	<div style = "display:flow-root;">
+		<div class = "table_list top-margin-large half-width left-float" style = "position:relative">
+			<div class = "table_header table_header_font">
+				<span class = "" style = "margin-left:40px;">Chat</span>
+			</div>
+			<div class = "table_chat_box chat-scrollbar" id = "chat-scroll">
+				<div class = "table_chat_box_row new-line">
+					<div class = "table_chat_box_row_photo left-float">
+					</div>
+					<div class = "table_chat_box_row_content left-float" style = "margin-right:40px;">
+						<p class = "table_user_font text-bold" style = "font-size:15px">Tony Pham</p>
+						<p class = "text-tiny">3hours ago</p>
+						<p class = "table_status_font" style = "font-size:13.5px;padding-top:8px;">Glad to hear you’re doing well and they’re lucky to have you. Let’s catch up when I get back!</p>
+						<p class = "table_user_font text-bold" style = "padding-top:7px;opacity:0.85">Reply</p>
+					</div>
+				</div>
+				<div class = "table_chat_box_row new-line">
+					<div class = "table_chat_box_row_photo left-float">
+					</div>
+					<div class = "table_chat_box_row_content left-float" style = "">
+						<p class = "table_user_font text-bold" style = "font-size:15px">Leah Amber</p>
+						<p class = "text-tiny">3hours ago</p>
+						<p class = "table_status_font" style = "font-size:13.5px;padding-top:8px;">I feel the same way! Meeting so many different passionate people is what life should be like :D</p>
+						<p class = "table_user_font text-bold" style = "padding-top:7px;opacity:0.85">Reply</p>
+						<p class = "table_status_font text-bold black-font" style = "font-size:12px;padding-top:5px;opacity:0.65">&#10149;&nbsp;&nbsp;2Reply</p>
+						
+						<div class = "top-margin-small table_chat_reply_box" style = "display:flex">
+							<div class = "table_chat_box_row_photo left-float">
+							</div>
+							<div class = "table_chat_box_row_content left-float" style = "">
+								<p class = "table_user_font text-bold" style = "font-size:15px">Leah Amber</p>
+								<p class = "text-tiny">3hours ago</p>
+								<p class = "table_status_font" style = "font-size:13.5px;padding-top:8px;">I feel the same way! Meeting so many different passionate people is what life should be like :D</p>
+								<p class = "table_user_font text-bold" style = "padding-top:7px;opacity:0.85">Reply</p>
+							</div>
+						</div>
+						<div class = "table_chat_reply_box top-margin-small" style = "width:85%;position:relative;display:flex;margin-left:10%">
+							<div class = "table_chat_box_row_photo left-float">
+							</div>
+							<div class = "left-float" style = "margin-left:40px;width:90%;position:absolute;">
+								<input type = "text" placeholder = "write a comment…" style = "">
+								<span style = "color:#d1d1d1;font-size:35px;opacity:0.6;position:absolute;right:40px;top:-5px;">&#9786;</span>
+								<span class = "camera_button" style = "position:absolute;right:10px;top:5px;"></span>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class = "table_chat_input" style = "width:100%;">
+				<div class = "table_chat_box_row_photo left-float">
+				</div>
+				<div class = "table_chat_box_row_content left-float" style = "margin-right:0px;width:90%;position:relative;">
+					<input type = "text" placeholder = "write a comment…" style = "padding-right:80px;">
+					<span style = "color:#d1d1d1;font-size:35px;opacity:0.6;position:absolute;right:40px;top:-5px;">&#9786;</span>
+					<span class = "camera_button" style = "position:absolute;right:10px;top:5px;"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>
+  $( function() {
+    $( "#sortable" ).sortable({
+	  cursor: "move",
+	  handle: ".table_drag_icon",
+	});
+    $( "#sortable" ).disableSelection();
+  } );
+</script>

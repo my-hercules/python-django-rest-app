@@ -1,0 +1,24 @@
+{%load staticfiles%}
+{% load inlinecss %}
+{% inlinecss "css/email.css" %}
+{% autoescape off %}
+<html>
+<body>
+	<div class = "box">
+		<header>
+			<div class = "header_text">Verify your account</div>
+			<img class = "header_logo" src = "http://{{ domain }}{%static 'img/email-logo.png'%}">
+		</header>
+		<div class = "content">
+			<span class = "content_text">Hi <span class = "content_text_2">{{ name }},</span><br/><br/>
+			<span calss = "content_text" style = "margin-top:30px;">Congratulations! You are among the first ones to join the <u>change</u>. Click the below button to verify...
+			</span>
+		</div>
+		<div class ="footer">
+			<a href = "http://{{ domain }}{% url 'employer_activate' uidb64=uid token=token %}" class = "btn btn-text">Verify Now</a>
+		</div>
+	</div>
+</body>
+</html>
+{% endautoescape %}
+{% endinlinecss %}

@@ -1,0 +1,414 @@
+{% load staticfiles %}
+<input value = "1" name = "order_count" hidden>
+<script>
+	function startIntro(){
+	var intro = introJs();
+	  intro.setOptions({
+	    steps: [
+	      {
+	        element: '#help_first',
+	        intro: "Click here to create order.",
+	        position:'left'
+	      }
+	    ]
+	  });
+	  intro.start();
+	}
+	function startIntro_second(){
+	  var intro = introJs();
+	  intro.setOptions({
+	    steps: [
+	      {
+	        element: '#order-list-content',
+	        intro: "Fill your order details.",
+	        position:'left'
+	      },
+	      {
+	        element: '#btn-create',
+	        intro: "Click this button to create your order",
+	        position:'left'
+	      }
+	    ]
+	  });
+	  intro.start();
+	}
+</script>
+<div class = "container" style = "margin-top:30px;">
+	<div class = "left-float" style = "width:60%;position:relative">
+		<span class = "text-header" style = "position:absolute;top:-30px;left:80px;width:200px;height:110px;">ORDER DETAILS</span>
+		<div class = "order-toggle-add" style = "position:absolute;top:-30px;right:0px;" onclick = "$('#order_form').show();">
+		</div>
+		<div style = "margin-top:10px;">
+		</div>
+		<form action="/createorder/{%if order.id is not none%}{{order.id}}/{%endif%}" {%if order.id is None and count > 0%} hidden {%endif%} method = "post" role = "form" id = "order_form">
+			{%csrf_token%}
+			<div class = "container content-box" style = "margin-top:-20px;">
+				<div class = "order-menu order-menu-complete top-margin-medium">
+					<div id = "help_first" style = "position:absolute;width:220px;height:40px">
+						<div id = "order-list" class = "left-float">
+				            <select value = "{{order.category}}" name = "order[0][category]" onchange = "on_orderlist()" id = "order-list-menu">
+							  {%if order is None%}<option value="ORDER CATEGORY" {% if order.category == "ORDER CATEGORY" %} selected {% endif %}>ORDER CATEGORY</option>{%endif%}
+							  <option value="SOURCING" {% if order.category == "SOURCING" %} selected {% endif %}>SOURCING</option>
+							  <option value="SCREENING" {% if order.category == "SCREENING" %} selected {% endif %}>SCREENING</option>
+							  <option value="FULL RECRUITMENT" {% if order.category == "FULL RECRUITMENT" %} selected {% endif %}>FULL RECRUITMENT</option>
+							</select>
+				        </div>
+			        </div>
+			        <button type = "submit" class = "btn disable-button" id = "btn-create">
+			        	<span>CREATE</span>
+			        </button>
+				</div>
+
+				<div id = "order-list-content" class = "order-content" hidden>
+					<div class = "order-content-top">
+						<div class = "dlg-skill-content">
+						<div><span class = "text-medium">INDUSTRY SKILLS</span></div>
+						<div class = "margin-control"><span class = "text-small">List industries and skills below for which you can hire candidates.</span></div>
+						<div class = "dlg-skill-content-box">
+							<div class = "dlg-skill-content-list">
+								<div id = "order-dropdown">
+									<select name = "order[0][industry]">
+
+									{%for industry in industry_list%}
+										<option value="{{industry}}" {% if order.industry == industry %} selected {% endif %}>{{industry}}</option>
+									{%endfor%}
+								  
+								<!--	  <option value="INDUSTRY" {% if order.industry == "INDUSTRY" %} selected {% endif %}>INDUSTRY</option>
+									  <option value="ECOMMERCE" {% if order.industry == "ECOMMERCE" %} selected {% endif %}>ECOMMERCE</option>-->
+									</select>
+								</div>
+						    </div>
+					        <div class = "row">
+					        	<div style = "margin-left:15px;">
+									<input type = "text" id = "order_skill{{order.id}}" placeholder = "Skills" value = "{{order.skill}}">
+									<input value = "{{order.skill}}" name = "order[0][order_skill]" id = "temp_orderskill{{order.id}}" type ="text" hidden>
+									<script>
+									set_tag_editor('#order_skill{{order.id}}',"#temp_orderskill{{order.id}}",'Skills','{%static "lists/skills.txt"%}');
+									</script>
+									<input type = "text" id = "order_location{{order.id}}" value = "{{order.location}}">
+									<input value = "{{order.location}}" name = "order[0][order_location]" id = "temp_orderlocation{{order.id}}" type ="text" hidden>
+									<script>
+									set_tag_editor('#order_location{{order.id}}',"#temp_orderlocation{{order.id}}",'In which location will you hire?','{%static "lists/locations.txt"%}');
+									</script>
+								</div>
+							</div>
+							<div class = "margin-control"><span class = "text-small">Experience of most candidates hired</span></div>
+							<div class = "dlg-skill-content-list">
+								<div id = "order-dropdown">
+									<select id = "order_experience" name = "order[0][experience]" value = "{{order.experience}}" onchange="on_experience();">
+									  <option value="Top level" {% if order.experience == "Top level" %} selected {% endif %}>Top level</option>
+									  <option value="Mid level" {% if order.experience == "Mid level" %} selected {% endif %}>Mid level</option>
+									  <option value="Entry level" {% if order.experience == "Entry level" %} selected {% endif %}>Entry level</option>
+									</select>
+								</div>
+						    </div>
+						</div>
+						</div>
+						<div class = "dlg-toggle-menu">
+						<div class = "toggle-save" onclick = "on_toggle_ordersave()">
+						</div>
+						<div class = "toggle-reset">
+						</div>
+						</div>
+					</div>
+					<div class = "dlg-v-stick top-margin-small new-line"></div>
+						<ul id="accordion" class="accordion">
+						  <li>
+						    <div class="link text-small"><i class="fa fa-database"></i>1. Ready to Join<i class="fa fa-chevron-down"></i></div>
+						    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+						  </li>
+						  <li>
+						    <div class="link"><i class="fa fa-code"></i>2. Qualified for job<i class="fa fa-chevron-down"></i></div>
+						    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+						  </li>
+						  <li id = "sourcing_option" hidden>
+						    <div class="link"><i class="fa fa-mobile"></i>3. Ready for further screening<i class="fa fa-chevron-down"></i></div>
+						    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+						  </li>
+						  <li id = "screening_option" hidden>
+						    <div class="link"><i class="fa fa-mobile"></i>3. Fulfils assessment criteria like core skills and culture fit. <i class="fa fa-chevron-down"></i></div>
+						    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+						  </li>
+						  <li id = "full_option" hidden>
+						    <div class="link"><i class="fa fa-mobile"></i>3.  Fulfils assessment criteria core skills and culture fit. <i class="fa fa-chevron-down"></i></div>
+						    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+						  </li>
+						  <li>
+						    <div class="link"><i class="fa fa-globe"></i>4. Accepts T&C of Job<i class="fa fa-chevron-down"></i></div>
+						    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+						  </li>
+						  <input value="{{order.criteria_header}}" style ="border-radius:0;border-width:0px" onkeydown="if(event.keyCode==13){ $('#newcriteria').html('5. '+$('#criteria_input').val()); $('#criteria_input').hide();$('#li_new').show();}" id="criteria_input" style="border:0" placeholder="Add your own criteria" name = "order[0][criteria_header]"{%if order is not None %}hidden{%endif%}>
+						  <li {%if order is None%} hidden {%endif%} id = "li_new">
+						    <div class="link"><i class="fa fa-globe"></i><div id = "newcriteria">5. {{order.criteria_header}}</div><i class="fa fa-chevron-down"></i>
+						    </div>
+						    <div class = "submenu">
+						    	<textarea onkeyup="adjustHeight(this)" class = "criteria-text" name = "order[0][criteria]" style = "border-radius:0;border-width:0px;border-top-width:1px;min-height: 60px;overflow: hidden;word-wrap:break-word;resize:none">{{order.criteria}}</textarea>
+						    </div>
+						  </li>
+						</ul>
+					<div class = "dlg-v-stick top-margin-small bottom-margin-medium"></div>
+					<span class = "new-line text-medium">PAYMENT AND TURNAROUND</span>
+					<div class = "margin-control"><span class = "text-small">Pick your payment type, mode and turnaround for this delivery.</span></div>
+					<div class = "dlg-skill-content-list">
+						<div id = "order-dropdown">
+							<select name = "order[0][pay_mode]" value = "{{order.pay_mode}}">
+							  <option value="POSTPAY" {% if order.pay_mode == "POSTPAY" %} selected {% endif %}>Post Pay</option>
+							  <option value="PREPAY" {% if order.cateory == "PREPAY" %} selected {% endif %}>Prepay</option>
+							</select>
+						</div>
+						<div id = "order-dropdown" class = "top-margin-small" style = "width:100%;position:relative;">
+							<select id = "order-paytype" name = "order[0][pay_type]" value = "{{order.pay_type}}" onchange = "on_orderpaytype()">
+							  <option id ="order-paytype-item" value="PAYMENT TYPE" {% if order.pay_type == "PAYMENT TYPE" %} selected {% endif %} >Payment type</option>
+							  <option value="Percentage" {% if order.pay_type == "Percentage" %} selected {% endif %}>Percentage</option>
+							  <option value="Flat fee" {% if order.pay_type == "Flat fee" %} selected {% endif %}>Flat fee</option>
+							</select>
+							<div class = "order-fee-div" id = "order-fee-div">
+								<div class = "order-fee-left" onclick = "" id = "fee_type">{% if order.pay_fee_type is not None %} {{order.pay_fee_type}}{% else %}${% endif %}</div>
+								<input type = "input" name =  "fee_type" value="{%if order.pay_fee_type is not None%} {{order.pay_fee_type}}{%else%}${%endif%}" id = "input_fee_type" hidden>
+								<input class = "order-fee-input" id = "fee_value" type = "text" value = "{% if order.pay_flatfee is None %} 300 {%else%} {{order.pay_flatfee}} {% endif %}" name = "order[0][pay_flatfee]">
+							</div>
+						</div>
+						<div id = "order-dropdown" class = "top-margin-small">
+							<select name = "order[0][turnaround]" value = "{{order.turnaround}}">
+							  <option value="3day" {% if order.turnaround == "3day" %} selected {% endif %}>Within 3 days</option>
+							  <option value="1week" {% if order.turnaround == "1week" %} selected {% endif %}>Within a week</option>
+							  <option value="2week" {% if order.turnaround == "2week" %} selected {% endif %}>Within 2 weeks</option>
+							  <option value="3week" {% if order.turnaround == "3week" %} selected {% endif %}>Within 3 weeks</option>
+							  <option value="1month" {% if order.turnaround == "1month" %} selected {% endif %}>Within a month</option>
+							</select>
+						</div>
+				    </div>
+				</div>
+			</div>
+		</form>
+
+		{%if orders|length == 0%}<script>startIntro();</script>{%endif%}
+		{% for ord in orders %}
+			{% if ord.new_flag != 0 %}
+			<div class = "container content-box" style  ="width:auto" id = "order_{{ord.id}}">
+				<div class = "order-menu">
+					<div id = "order-list" class = "order-detail-menu left-float">
+						<div class= "order_category_div"><span style="float:left;white-space: nowrap;overflow: hidden;">{{ord.category}}</span></div>
+			        </div>
+			        <div class = "left-float"><span class = "order-detail-font">{{ord.pay_fee_type}}{{ord.pay_flatfee}}</span></div>
+			        <div class = "right-float top-margin">
+						<div class = "left-float order-toggle-edit right-margin-small" onclick = "on_ordercontrol({{ord.id}},'edit')">
+						</div>
+						<div class = "left-float order-toggle-delete right-margin-small" onclick = "on_ordercontrol({{ord.id}},'delete')">
+						</div>
+					</div>
+				</div>
+				<div class = "order-complete-content">
+					<div class = "left-float">
+						<span class = "order-complete-bluefont">{{ord.industry}}</span>
+						<div class><span class = "text-small text-bold">{{ord.location}}</span></div>
+
+						<input type = "text" id = "ord_skill{{ord.id}}" placeholder = "Skills" value = "{{ord.skill}}" style = "padding-left:0px">
+						<input value = "{{ord.skill}}" name = "ord[0][ord_skill]" id = "temp_ordskill{{ord.id}}" type ="text" hidden>
+						<script>
+						$('#ord_skill{{ord.id}}').tagEditor({
+							forceLowercase: false,
+						    placeholder: 'Skills',
+						    onChange: function(field, editor, tags) {
+						       $("#temp_ordskill{{ord.id}}").val(tags.length ? tags.join(', ') : '----');
+						    },
+						});
+						$('.order-complete-content .tag-editor-spacer').remove(); 
+						$(".order-complete-content .tag-editor-delete").remove();
+						$(".order-complete-content .tag-editor-tag").addClass("right-border");
+						$(".order-complete-content .tag-editor-tag").css("padding-right","10px");
+						$(".order-complete-content .tag-editor-tag").css("margin-right","10px");
+						</script>
+						<!--<div class = "margin-control skill-tag left-float">Java</div>
+						<div class = "margin-control skill-tag left-float left-margin-small">C++</div> -->
+					</div>
+					<div class = "right-float order-small-toggle">
+						<div class = "order-complete-toggle">
+							<div class = "left-float order-small-toggle-button-orderlevel" style = "background-image:url('{% static "img/spotwrk/New Files/" %}{{ord.experience}}.png')"></div><span class = "left-float text-tiny top-margin left-margin">{{ord.experience}}</span>
+							<div class = "top-margin new-line left-float order-small-toggle-button-paytype"></div><span class = "left-float text-tiny top-margin-small left-margin">{{ord.pay_type}}</span>
+							<div class = "top-margin new-line left-float order-small-toggle-button-turnaround"></div><span class = "left-float text-tiny top-margin-small left-margin">{{ord.turnaround}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		{%endfor%}
+		<style>
+		.order-complete-content ul{
+			border:0px!important;
+		}
+		</style>
+	</div>
+	<div class = "left-float" style = "width:30%">
+		<div id = "done_button" hidden><a href = "/payment" style = "margin-top:10px;margin-left:50px;width:150px;height:40px" class = "btn blue-button"><span class = "order-done-button">Done</span></a></div>
+	</div>
+</div>
+<script>
+	
+	function adjustHeight(el){
+	    el.style.height = (el.scrollHeight > el.clientHeight) ? (el.scrollHeight)+"px" : "60px";
+	}
+	set_nav_active("order");
+	if($("#order-list-menu").val() == "ORDER CATEGORY"){
+		$("#order-list-content").hide();
+		$("#btn-create").removeClass("blue-button");
+	}
+	else{
+		$("#order-list-content").show();
+		$("#btn-create").addClass("blue-button");
+	}
+	{%if order.category == "SOURCING"%}
+		$("#sourcing_option").show();
+	{%elif order.category == "SCREENING"%}
+		$("#screening_option").show();
+	{%else%}
+		$("#full_option").show();
+	{%endif%}
+	function on_fee_type(pVal)
+	{
+		if(pVal == "$"){
+			$("#fee_type").html("%");
+			$("#fee_value").val("10");
+			$("#input_fee_type").val("%");
+		}
+		else{
+			$("#fee_type").html("$");
+			$("#fee_value").val("300");
+			$("#input_fee_type").val("$");
+		}
+	}
+	{% if order is not None %} 
+		$("#order-list-content").show();
+		$("#btn-create").addClass("blue-button");
+	{% endif %}
+</script>
+<script>
+	function checkDone(){
+		$.ajax({
+	        url: '/ajax/get_order_count',
+	        type: 'get',
+	        success: function (data) {
+	            if (data == "success"){
+	            	$("#done_button").show();
+	            	$('#order_tip').hide();}
+	            else{
+	            	$("#done_button").hide();
+	            	$('#order_tip').show();}
+	        }
+	    });
+	}
+	checkDone();
+	$("#progress_div").show();
+	progress_setpos("order");
+	{% if order.pay_type == "PAYMENT TYPE" %}
+		$("#order-fee-div").hide();
+	{%endif%}
+	function on_ordercontrol(pID,pAction)
+	{
+		switch(pAction){
+			case "delete":
+				$.ajax({
+			        url: '/ajax/order_delete/'+pID,
+			        type: 'get',
+			        success: function (data) {
+			            $("#order_"+pID).hide()
+			            if (data == 0)
+			            	$("#order_form").show();
+			    		checkDone();
+			        }
+			    });
+				break;
+			case "edit":
+				location.href = "/ajax/order/"+pID;
+				break;
+		}
+	}
+	function on_toggle_ordersave()
+	{
+	}
+	function on_orderpaytype()
+	{
+		if($("#order-paytype").val()!="PAYMENT TYPE"){
+			$("#order-fee-div").show();
+			$("li[data-value='PAYMENT TYPE']").remove();
+			if ($("#order-paytype").val()=="Percentage"){
+				on_fee_type("$");
+			}
+			else{
+				on_fee_type("%");
+			}
+				
+		}
+		else{
+			$("#order-fee-div").hide();
+		}
+	}
+	function on_experience()
+	{
+		if($("#order_experience").val()!="EXPERIENCE"){
+			$("li[data-value='EXPERIENCE']").remove();
+		}
+	}
+</script>
+<script>
+	function on_orderlist(){
+		if($("#order-list-menu").val() == "ORDER CATEGORY"){
+			$("#order-list-content").hide();
+			$("#btn-create").removeClass("blue-button");
+		}
+		else{
+			$("#order-list-content").show();
+			$("li[data-value='ORDER CATEGORY']").remove();
+			$("#btn-create").addClass("blue-button");
+			if($("#order-list-menu").val()=="SOURCING"){
+				$("#sourcing_option").show();
+				$("#screening_option").hide();
+				$("#full_option").hide();
+			}
+			else if($("#order-list-menu").val()=="SCREENING"){
+				$("#sourcing_option").hide();
+				$("#screening_option").show();
+				$("#full_option").hide();
+			}
+			else{
+				$("#sourcing_option").hide();
+				$("#screening_option").hide();
+				$("#full_option").show();
+			}
+			{%if orders|length == 0%}startIntro_second();{%endif%}	
+		}
+	}
+	$('select').prettyDropdown();
+	{%if order.pay_type == "FLAT FEE"%}$("li[data-value='PAYMENT TYPE']").remove();{%endif%}
+	function loadaccordion(){
+		$(function() {
+			var Accordion = function(el, multiple) {
+				this.el = el || {};
+				this.multiple = multiple || false;
+
+				// Variables privadas
+				var links = this.el.find('.link');
+				// Evento
+				links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+			}
+
+			Accordion.prototype.dropdown = function(e) {
+				var $el = e.data.el;
+					$this = $(this),
+					$next = $this.next();
+
+				$next.slideToggle();
+				$this.parent().toggleClass('open');
+
+				if (!e.data.multiple) {
+					$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+				};
+			}	
+
+			var accordion = new Accordion($('#accordion'), false);
+		});
+	}
+	loadaccordion();
+</script>
+
+

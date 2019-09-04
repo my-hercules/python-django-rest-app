@@ -1,0 +1,23 @@
+{% extends "layout/base.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block css %}
+	{% include "layout/components/css.html" %}
+{% endblock %}
+
+
+{% block header %} 
+	{% include "layout/components/header.html" %}
+{% endblock %}
+
+{% block content %}
+	{% include "home/content/main.html" %}
+{% endblock %}
+
+{% block js%}
+	{% include "layout/components/js.html" %}
+{% endblock %}
+{% block footer %}
+	{% include "layout/components/footer.html" %}
+{% endblock %}

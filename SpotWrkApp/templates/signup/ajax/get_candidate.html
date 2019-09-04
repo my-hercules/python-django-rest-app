@@ -1,0 +1,12 @@
+
+{% for candidate in candidates %}
+	<div class = "candidate_info" id = "candidate_info_{{candidate.id}}" style = "position:relative;width:25%">
+		<span class = "text-large blue-font">Candidate details saved.</span>
+		<div class = "dlg-toggle-menu right-float" style = "position:absolute;width:80px;right:0px;top:16%">
+			<div class = "toggle-edit left-float right-margin-small" onclick = "candidate_toggle({{candidate.id}},'edit');">
+			</div>
+			<div class = "toggle-delete right-float right-margin-small" onclick = "candidate_toggle({{candidate.id}},'delete');">
+			</div>
+		</div>
+	</div>
+{% endfor %}

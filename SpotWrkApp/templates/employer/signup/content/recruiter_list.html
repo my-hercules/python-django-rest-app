@@ -1,0 +1,211 @@
+{%load staticfiles%}
+<script type="text/javascript">
+	$("#progress_div").hide();
+	set_nav_active("order");
+</script>
+<form action = "{%url 'employer_hirerecruiter'%}" method = "post" id = "recruiter_list_form">
+<div class = "rec_list">
+	<div class = "rec_list_left">
+		<div class = "rec_list_box" id = "recruiter_list_servicetype">
+			<input type = "text" id = "filter_servicetype" value = "" hidden>
+			<p class = "rec_list_heading"><span>Service type</span></p>
+			<p class = "rec_list_item new-line"><span class = "left-float">Sourcing</span><span class = "right-float">{{sourcing_count}}</span></p>
+			<p class = "rec_list_item new-line"><span class = "left-float">Screening</span><span class = "right-float">{{screening_count}}</span></p>
+			<p class = "rec_list_item new-line"><span class = "left-float">Full recruitement</span><span class = "right-float">{{fullrecruitment_count}}</span></p>
+		</div>
+		<div class = "v-stick"></div>
+		<div class = "rec_list_box" id = "recruiter_list_industry">
+			<input type = "text" id = "filter_industry" value = "" hidden>
+			<p class = "rec_list_heading"><span>Industry</span></p>
+			<select name = "experience[{{exp.id}}][industry]" value = "{{exp.industry}}">
+				{%for industry in industry_list%}
+					<option value="{{industry}}" {% if exp.industry == industry %} selected {% endif %}>{{industry}}</option>
+				{%endfor%}
+			</select>
+		</div>
+		<div class = "v-stick"></div>
+		<div class = "rec_list_box" id = "recruiter_list_paymenttype">
+			<input type = "text" id = "filter_paymenttype" hidden>
+			<p class = "rec_list_heading"><span>Payment type</span></p>
+			<p class = "rec_list_item new-line"><span>Percentage</span></p>
+			<p class = "rec_list_item new-line"><span>Flat fee</span></p>
+		</div>
+		<div class = "v-stick"></div>
+		<div class = "rec_list_box" id = "recruiter_list_paymentmode">
+			<input type = "text" id = "filter_paymentmode" hidden>
+			<p class = "rec_list_heading"><span>Payment mode</span></p>
+			<p class = "rec_list_item new-line"><span>Post pay</span></p>
+			<p class = "rec_list_item new-line"><span>Pre pay</span></p>
+		</div>
+		<div class = "v-stick"></div>
+		<div class = "rec_list_box" id = "recruiter_list_turnaround">
+			<input type = "text" id = "filter_turnaround" hidden>
+			<p class = "rec_list_heading"><span>Turn around</span></p>
+			<p class = "rec_list_item new-line"><span>Within 3 days</span></p>
+			<p class = "rec_list_item new-line"><span>Less than a week</span></p>
+			<p class = "rec_list_item new-line"><span>Less than 2 weeks</span></p>
+			<p class = "rec_list_item new-line"><span>Less than 3 weeks</span></p>
+			<p class = "rec_list_item new-line"><span>Less than a month</span></p>
+		</div>
+		<div class = "v-stick"></div>
+	</div>
+	<div class = "rec_list_main">
+		<div class = "search_box">
+			<input class = "search_skill" name = "search_skill" id = "search_skill" type = "text" placeholder="Skills">
+			<input class = "search_location" name = "search_location" id = "search_location" type = "text" placeholder="Location">
+			<input class = "search_experience" name = "search_experience" id = "search_experience" type = "text" placeholder="Experience">
+			<input class = "search_submit btn blue-button" type = "button" onclick = "on_search()" value ="SEARCH">
+			<script>
+				set_autocomplete("search_skill","{%static "lists/skills.txt"%}");
+				set_autocomplete("search_location","{%static "lists/locations.txt"%}");
+				set_autocomplete("search_experience","{%static "lists/experiences.txt"%}");
+			</script>
+		</div>
+		<div class = "search_filter">
+			<div hidden><input id = "search_filter" type = "text" style = "border:none" value=""></div>
+			<div id = "filter_widget_box">
+				<!-- <div class = "filter_widget">Sourcing<div class = "filter_close">x</div></div> -->
+			</div>
+		</div>
+		<div id = "recruiter_list">
+			{% include "employer/signup/ajax/ajax_recruiter_list.html" %}
+		</div>
+	</div>
+</div>
+</form>
+			<!--
+			<style>
+				.tag-editor .placeholder {
+				    padding: 0 8px;
+				    color: #6b7c93;
+				    max-width: 99%;
+				}
+				.skill_font{
+					overflow: hidden;
+					padding-left: 5px;
+					padding-top: 5px;
+					float:left;
+					display: inline-block;
+					width: 30%;
+				    border-top-right-radius: 0;
+				    border-bottom-right-radius: 0;
+					height: 100%;
+				    font-family: Avenir;
+				    font-size: 20px!important;
+				    font-weight: 500!important;
+				    border: solid 0.5px #dadfea!important;
+			        text-align: left!important;
+    				color: #6b7c93!important;
+				}
+			</style>
+			<script>
+				set_tag_editor('#search_skill',"#search_skill",'Skills','{%static "lists/skills.txt"%}','.rec_list_main','False','skill_font');
+			</script>-->
+<script>
+	function on_search()
+	{
+		skill = $("#search_skill").val();
+		slocation = $("#search_location").val();
+		experience = $("#search_experience").val();
+		url = "{% url 'ajax_getsearchobject' %}";
+		$.ajax({
+	        url: url,
+	        type:'post',
+	        data: $("#recruiter_list_form").serialize(),
+	        success: function (data) {
+	          $("#recruiter_list").html(data);
+	        }
+	    });
+	}
+	function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: '.search_box',
+                intro: "Fill your prefences to find your desired recruiter.",
+                position:'left'
+              },
+              {
+                element: '.rec_list_left',
+                intro: "Advanced search criterias to filter you search further.",
+                position:'right'
+              },
+              {
+                element: '.recruiter_list',
+                intro: 'Here you will find your filtered recruiters. Click on each of them to start hiring them.',
+                position: 'left'
+              }
+            ]
+          });
+          intro.start();
+      }
+    {%if is_first == "Yes"%}
+		startIntro();	
+    {%endif%}
+	function getFilterObject(pFilter){
+		$.ajax({
+	        url: "{% url 'ajax_getfilterobject' %}",
+	        data: {
+	          'filter': pFilter
+	        },
+	        success: function (data) {
+	          $("#recruiter_list").html(data);
+	        }
+	    });
+	}
+	function refreshFilterwithString(pValue){
+		$( ".rec_list_item.rec_list_active" ).each(function(index){
+			if($(this).html().includes(pValue)){
+				$(this).removeClass("rec_list_active");
+				var filterInput=$(this).closest('div').children();
+			  	str = filterInput.val()
+			  	str = str.replace(':'+$(this).children().html(),"");
+			  	filterInput.val(str);
+			}
+		});
+	}
+	$('body').on('click', 'div.filter_close', function() {
+		var sVal = $(this).parent().html().split("<")[0]
+		var str = $("#search_filter").val();
+		new_str = str.replace(":"+sVal,"");
+		if (new_str == str)
+			new_str = new_str.replace(sVal,"");
+		refreshFilter(new_str);
+		refreshFilterwithString(sVal);
+	});
+	function refreshFilter(pFilter){
+		$("#search_filter").val(pFilter);
+		getFilterObject(pFilter);
+		filters = pFilter.split(",");
+		$("#filter_widget_box").html("");
+
+		$.each( filters, function( key , filter ) {
+			newfilter = filter.split(":");
+			$.each(newfilter,function(no,value){
+				if(value != "")
+					$("#filter_widget_box").append("<div style = 'margin-right:10px;margin-top:5px;' class = 'filter_widget'>"+value+"<div class = 'filter_close'>x</div></div>");
+			});
+		});
+	}
+	$( ".rec_list_item" ).click(function() {
+	  var filterInput=$(this).closest('div').children();
+	  var Servicetype = $("#filter_servicetype");
+	  var Paymenttype = $("#filter_paymenttype");
+	  var Paymentmode = $("#filter_paymentmode");
+	  var Turnaround = $("#filter_turnaround");
+	  if($(this).hasClass('rec_list_active'))
+	  {
+	  	$(this).removeClass('rec_list_active');
+	  	str = filterInput.val()
+	  	str = str.replace(':'+$(this).children().html(),"");
+	  	filterInput.val(str);
+	  }
+	  else{
+	  	$(this).addClass('rec_list_active');
+	  	filterInput.val(filterInput.val()+':'+$(this).children().html());
+	  }
+	  var filter = Servicetype.val().substring(1)+","+Paymenttype.val().substring(1)+","+Paymentmode.val().substring(1)+","+Turnaround.val().substring(1);
+	  refreshFilter(filter);
+	});
+</script>

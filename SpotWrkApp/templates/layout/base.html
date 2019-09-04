@@ -1,0 +1,33 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="google-site-verification" content="bcqZQmo98grY88dfTbPhGRO5IFpZKpomfRhhO55Moy8" />
+	<title>{% block title %}{% endblock %}</title>
+	{% block css %}{% endblock %}
+	{% block js %}{% endblock %}
+</head>
+
+<body>
+	{% block header %}{% endblock %}
+	
+	{% block content %}{% endblock %}
+
+	{% block footer %}{% endblock %}
+</body>
+<style>
+    textarea {
+        overflow: hidden;
+    }
+    </style>
+    <script>
+    function resizeTextarea(ev) {
+        this.style.height = '49px';
+        this.style.height = this.scrollHeight + 3 + 'px';
+    }
+    sels = document.getElementsByTagName('textarea');
+    for(i=0; i<sels.length; i++) {
+        sels[i].addEventListener('input', resizeTextarea, false);
+    }
+    </script>
+</html>

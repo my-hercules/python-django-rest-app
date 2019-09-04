@@ -1,0 +1,146 @@
+{% load staticfiles %}
+<form action = "{%url 'employer_hirerecruiter'%}" method = "post" role = "form" id = "checkout_form">
+<div style = "margin-left:15%">
+	<div class = "left-float" id = "order_type_content">
+		{%if order_type == "SCREENING"%}
+			{%include "employer/signup/ajax/ajax_order_screening.html"%}
+		{%else%}
+			{%include "employer/signup/ajax/ajax_order_sourcing.html"%}
+		{%endif%}
+	</div>
+	<div class = "left-float left-margin-large" style = "width:500px;">
+		<span class = "text-header bottom-margin-medium" >ORDER DETAIL</span>
+		<div class = "flat-dlg">
+			<div class = "scrollbar" id = "new-scroll" class="scrollbar">
+				{%for ord in recruiter.tborder_set.all%}
+					<div class = "content-box" id = "order_{{ord.id}}" style = "padding:0px;margin:0px;">
+						<div id = "order_list_menu_{{ord.id}}" onclick = "on_select_category({{ord.id}})" class = "order-menu order-dlg {%if order_id != ord.id|slugify  %}order_unchecked{%endif%}" style = "border-radius:0px;">
+							<div id = "order-list" class = "order-detail-menu left-float">
+								<div class= "order_category_div" ><span style="float:left;white-space: nowrap;overflow: hidden;">{{ord.category}}</span></div>
+					        </div>
+					        <div class = "left-float"><span class = "order-detail-font" style = "margin-left:110px;">{{ord.pay_fee_type}}{{ord.pay_flatfee}}</span></div>
+					        <div class = "right-float top-margin" id = "order_checked_{{ord.id}}" {%if order_id != ord.id%} hidden{%endif%}>
+								<div class = "left-float employer-order-toggle-select order-toggle-delete right-margin-small">
+								</div>
+							</div>
+						</div>
+						<div class = "order-complete-content" style = "height:120px;width:99.7%!important;margin-left:1px">
+							<div class = "left-float">
+								<span class = "order-complete-bluefont">{{ord.industry}}</span>
+								<div class = "bottom-margin"><span class = "text-small text-bold">{{ord.location}}</span></div>
+								<span class = "text-tiny">He can hire for</span>
+								<div style = "margin-left:-10px;">
+									<input type = "text" id = "ord_skill{{ord.id}}" placeholder = "Skills" value = "{{ord.skill}}" style = "padding-left:0px">
+									<input value = "{{ord.skill}}" name = "ord[0][ord_skill]" id = "temp_ordskill{{ord.id}}" type ="text" hidden>
+								</div>
+							</div>
+							<div class = "right-float order-small-toggle" style = "width:100px;">
+								<div class = "order-complete-toggle">
+									<div class = "left-float order-small-toggle-button-orderlevel" style = "background-image:url('{% static "img/spotwrk/New Files/"|add:ord.experience|add:".png"%}'"></div><span class = "left-float text-tiny top-margin left-margin">{{ord.experience}}</span>
+									<div class = "top-margin new-line left-float order-small-toggle-button-paytype"></div><span class = "left-float text-tiny top-margin-small left-margin">{{ord.pay_type}}</span>
+									<div class = "top-margin new-line left-float order-small-toggle-button-turnaround"></div><span class = "left-float text-tiny top-margin-small left-margin">{{ord.turnaround}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script>
+						set_tag_editor('#ord_skill{{ord.id}}',"#",'Skills','{%static "lists/skills.txt"%}','.order-complete-content','True');
+					</script>
+				{%endfor%}
+				<script>
+					function on_select_category(pID){
+						id_box = $("#order_id_input")
+						if(pID==id_box.val())
+							return;
+						$.ajax({
+					        url: "{% url 'ajax_getordertype' %}",
+					        data: {
+					          'order_id': pID,
+					        },
+					        success: function (data) {
+					          $("#order_type_content").html(data['order_content']);
+					          $("#criteria").html(data['criteria_origin']);
+					        }
+					    });
+						$("#order_list_menu_"+pID).removeClass("order_unchecked");
+						$("#order_list_menu_"+id_box.val()).addClass("order_unchecked");
+						$("#order_checked_"+pID).show();
+						$("#order_checked_"+id_box.val()).hide();
+						id_box.val(pID);
+					}
+				</script>
+			</div>
+			<span class = "text-medium">STANDARD SOURCING CRITERIAS</span>
+			<div id = "criteria">
+				<ul id="accordion" class="accordion" style = "display:block;float:none">
+				  <li>
+				    <div class="link text-small"><i class="fa fa-database"></i>1. Ready to Join<i class="fa fa-chevron-down"></i></div>
+				    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+				  </li>
+				  <li>
+				    <div class="link"><i class="fa fa-code"></i>2. Qualified for job<i class="fa fa-chevron-down"></i></div>
+				    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+				  </li>
+				  <li id = "sourcing_option">
+				    <div class="link"><i class="fa fa-mobile"></i>3. Ready for further screening<i class="fa fa-chevron-down"></i></div>
+				    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+				  </li>
+				  <li>
+				    <div class="link"><i class="fa fa-globe"></i>4. Accepts T&C of Job<i class="fa fa-chevron-down"></i></div>
+				    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+				  </li>
+				  <li id = "li_new">
+				    <div class="link"><i class="fa fa-globe"></i><div id = "newcriteria">5. Additional 1 iteration of 2 candidates</div><i class="fa fa-chevron-down"></i>
+				    </div>
+				    <div class = "submenu">
+				    	<textarea onkeyup="adjustHeight(this)" class = "criteria-text" name = "order[0][criteria]" style = "border-radius:0;border-width:0px;border-top-width:1px;min-height: 60px;overflow: hidden;word-wrap:break-word;resize:none">I accept the T&C</textarea>
+				    </div>
+				  </li>
+				</ul>
+			</div>
+			<span class = "text-small text-bold green-font left-margin-small bottom-margin"> ✓ ACCEPTED BY RECRUITER</span>
+				<input type = "text" value = "{{recruiter.id}}" name = "recruiter_id" hidden>
+				<input type = "text" value = "{{order_id}}" id = "order_id_input" name = "order_id" hidden>
+				<p style="width:100%;height:60px;margin-top:30px"><button type = "submit" name = "payment" class = "btn green-button" style = "height:50px;width:150px;float:right;">PAYMENT</button></p>
+		</div>
+	</div>
+</div>
+</form>
+<script>
+	$("#progress_div").show();
+	progress_setpos("order");
+	set_nav_active("order");
+	set_tag_editor('#skill',"#temp_skill{{exp.id}}",'Skills','{%static "lists/skills.txt"%}','#user_skill_tag','True');
+	set_tag_editor('#rec_skill{{exp.id}}',"#temp_skill{{exp.id}}",'Skills','{%static "lists/skills.txt"%}','.mytagedit{{exp.id}}','True');
+	set_tag_editor('#rec_location{{exp.id}}',"#temp_location{{exp.id}}",'Locations where you hired most.','{%static "lists/locations.txt"%}','.mytagedit{{exp.id}}','True');
+	set_tag_editor('#ord_skill{{ord.id}}',"#",'Skills','{%static "lists/skills.txt"%}','.order-complete-content','True');
+	function loadaccordion(){
+		$(function() {
+			var Accordion = function(el, multiple) {
+				this.el = el || {};
+				this.multiple = multiple || false;
+
+				// Variables privadas
+				var links = this.el.find('.link');
+				// Evento
+				links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+			}
+
+			Accordion.prototype.dropdown = function(e) {
+				var $el = e.data.el;
+					$this = $(this),
+					$next = $this.next();
+
+				$next.slideToggle();
+				$this.parent().toggleClass('open');
+
+				if (!e.data.multiple) {
+					$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+				};
+			}	
+
+			var accordion = new Accordion($('#accordion'), false);
+		});
+	}
+	loadaccordion();
+</script>

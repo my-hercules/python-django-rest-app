@@ -1,0 +1,23 @@
+{% extends "layout/employer/base.html" %}
+
+{% block title %} Employer Home {% endblock %}
+
+{% block css %}
+	{% include "layout/employer/home/css.html" %}
+{% endblock %}
+
+
+{% block header %} 
+	{% include "layout/employer/home/header.html" %}
+{% endblock %}
+
+{% block content %}
+	{% include "employer/home/content/main.html" %}
+{% endblock %}
+
+{% block js%}
+	{% include "layout/employer/home/js.html" %}
+{% endblock %}
+{% block footer %}
+	{% include "layout/employer/home/footer.html" %}
+{% endblock %}

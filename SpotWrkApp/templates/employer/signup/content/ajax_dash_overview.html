@@ -1,0 +1,68 @@
+{%load staticfiles%}
+	<div class = "table_list">
+		<div class = "table_header table_header_font">
+			<span class = "table_column_status">&nbsp
+			</span>
+			<span class = "table_column_company">
+				Client Company
+			</span>
+			<span class = "table_column_user">
+				User details
+			</span>
+			<span class = "table_column_category">
+				Order Category
+			</span>
+			<span class = "table_column_details">
+				Order Details
+			</span>
+			<span class = "table_column_level">&nbsp
+			</span>
+			<span class = "table_column_action">&nbsp
+			</span>
+		</div>
+	{%for i in "12345"%}
+		<div class = "table_row">
+			<div class = "table_column_status">
+				<span class = "table_status_font text-bold">Going on</span><br>
+				<span class = "table_status_font">Today</span><br>
+			</div>
+			<div class = "table_column_company">
+				<span class = "table_companyname_font">Client Techno…</span><br>
+				<span class = "table_companyloc_font">Noida, UP, IN</span><br>
+			</div>
+			<div class = "table_column_user">
+				<img class = "table_user_img"><br>
+				<span class = "table_user_font">Henry Ada</span><br>
+				<span class = "table_user_font">Senior Recruiter</span><br>
+			</div>
+			<div class = "table_column_category">
+				<span class = "table_category_font">SOURCING</span>
+			</div>
+			<div class = "table_column_details">
+				<span class = "table_detail_industry_font">Ecommerce</span><br>
+				<span class = "table_detail_loc_font">San Francisco, California, USA</span><br>
+				<span style = "margin-bottom:0px;margin-top:0px;margin-left:0px;" id = "skill_box{{i}}"></span>
+				<script>
+					var str = "Java,C++";
+					newfilter = str.split(",");
+					$.each(newfilter,function(no,value){
+						if(value != ""){
+							$("#skill_box{{i}}").append("<div class = 'skill-tag-overview'>"+value+"</div>");
+						}
+					});
+				</script>
+			</div>
+			<div class = "table_column_level">
+				<div class = "order-complete-toggle">
+					<div class = "left-float order-small-toggle-button-orderlevel" style = "background-image:url('{% static "img/spotwrk/New Files/" %}Mid level.png')"></div><span class = "left-float text-tiny top-margin left-margin" style = "width:auto;">Mid level</span>
+					<div class = "new-line left-float order-small-toggle-button-paytype"></div><span style = "width:auto;" class = "left-float text-tiny top-margin-small left-margin">Percentage</span>
+					<div class = "new-line left-float order-small-toggle-button-turnaround"></div><span style = "width:auto;" class = "left-float text-tiny top-margin-small left-margin">a week</span>
+				</div>
+			</div>
+			<div class = "table_column_action">
+				<span class = "table_price_font">$300.00</span><br>
+				<button class = "table_btn_green">VIEW</button>
+			</div>
+		</div>
+	{%endfor%}
+	</div>

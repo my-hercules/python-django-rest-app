@@ -1,0 +1,91 @@
+{% load staticfiles %}	
+<form onkeydown='return !(event.keyCode==13)' role = 'form' id = 'recruite_form_{{exp.id}}'>
+		<input type = "text" name = "exp_id" value = "{{exp.id}}" id = "exp_id_{{exp.id}}" hidden></input>
+		<div class = "color-dlg border-green" id = "recruiter_{{exp.id}}">
+			<div class = "dlg-skill-content">
+				<div><span class = "text-medium">INDUSTRY SKILLS</span></div>
+				<div class = "margin-control"><span class = "text-small">List industries and skills below for which you can hire candidates.</span></div>
+				<div class = "dlg-skill-content-box" id = "help_experience">
+					<div class = "dlg-skill-content-list" style = "margin-top:10px;margin-bottom:10px">
+			        	<span class = "company_industry_list">{{exp.industry}}</span>
+				    </div>
+			        <div class = "row">
+			        <div class = "mytagedit{{exp.id}}">
+						<div class = "col-sm-12" style = "margin-bottom:0px;margin-top:0px;margin-left:0px;" id = "exp_skill_box{{exp.id}}">
+						</div>
+						<script>
+							var str = "{{exp.skill}}";
+							newfilter = str.split(",");
+							$.each(newfilter,function(no,value){
+								if(value != ""){
+									$("#exp_skill_box{{exp.id}}").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+								}
+							});
+						</script>
+						<div class = "col-sm-12" style = "margin-bottom:0px;margin-top:0px;margin-left:0px;" id = "exp_location_box{{exp.id}}">
+						</div>
+						<script>
+							var str = "{{exp.location}}";
+							newfilter = str.split(",");
+							$.each(newfilter,function(no,value){
+								if(value != ""){
+									$("#exp_location_box{{exp.id}}").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+								}
+							});
+						</script>
+					</div>
+					</div>
+					<div class = "margin-control"><span class = "text-small">Experience of most candidates hired</span></div>
+					<div class = "dlg-skill-content-list">
+						<span class = "exp_level">{{exp.candidate_experience}}</span>	
+				    </div>
+					<div class = "margin-control"><span class = "text-small">Number of candidates hired in this industry</span></div>
+					<div class = "dlg-skill-content-list">
+						<span class = "company_industry_list" style = "padding:3px 8px;font-size:14px">{{exp.candidate_number}}</span>
+				    </div>
+				</div>
+				<div class = "dlg-stick" style="height:55%;"></div>
+				<div style = "float:left;width:37%;height:85%;" class = "text-center">
+
+					<div style = "margin-top:30%;margin-left:10%;">
+						<span class = "text-small">You hired for</span><br>
+						<span class = "text-small text-bold">{{exp.company_number}} companies</span><span class ="text-small"> with</span><br>
+						<span class = "text-small text-bold">{{exp.hired_count}} candidates</span>
+					</div>
+				</div>
+			</div>
+
+			<div class = "dlg-toggle-menu">
+				<div id = "tog_rec_edit_{{exp.id}}">
+					<div class = "toggle-undo" onclick="on_rec_toggle('undo',{{exp.id}})" >
+					</div>
+					<button class = "toggle-save" onclick="on_rec_toggle('save',{{exp.id}})"></button>
+				</div>
+				<div id = "tog_rec_overview_{{exp.id}}" hidden>
+					<div class = "toggle-edit" onclick = "on_rec_toggle('edit',{{exp.id}})">
+					</div>
+					<div class = "toggle-delete" onclick="on_rec_toggle('delete',{{exp.id}})">
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+<script>
+
+	function onShowcandidate(pID){
+		$('#candidate_form').attr('action','/createcandidate/{{exp.id}}/');
+		$('#btn_candidatesave').attr('onclick','candidate_submit({{exp.id}});');
+		$.ajax({
+			type:'get',
+			url:'/getallcandidate/'+pID,
+			success: function(data) {
+				$("#saved_part").html(data);
+            }
+		});
+		$("#industry_candidate").html("industry");
+		$("#skill_candidate").html("{{exp.skill}}");
+		//$('#candidate_recid').val('{{exp.id}}');
+	}
+</script>
+</form>

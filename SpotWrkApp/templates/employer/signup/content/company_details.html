@@ -1,0 +1,88 @@
+{% load staticfiles %}	
+<input type = "text" value="" hidden id = "company_status">
+<form action="/employer/main/profile/" method = "post" role = "form" id = "company_form">
+		<div class = "color-dlg border-green">
+
+			<div class = "dlg-skill-content">
+					{%include "employer/signup/ajax/ajax_editcompany.html"%}
+			</div>
+			<div class = "dlg-toggle-menu">
+				<div id = "tog_company_save">
+					<div class = "toggle-undo" onclick="on_company_toggle('undo')">
+					</div>
+					<!--<div class = "toggle-save" onclick="on_rec_toggle_{{exp.id}}('save');">-->
+					<div class = "toggle-save" name = "save_company" onclick="on_company_toggle('save')"></div>
+				</div>
+				<div id = "tog_company_edit" hidden>
+					<div class = "toggle-edit" onclick = "on_company_toggle('edit')">
+					</div>
+					<div class = "toggle-undo" onclick= "on_company_toggle('undo')">
+					</div>
+				</div>
+			</div>
+		</div>
+</form>
+<script>
+	function on_service_delete(pID,pServiceID){
+		$.ajax({
+	        url: "{% url 'ajax_deleteservice' %}?id="+pID+"&sid="+pServiceID,
+	        data: $("#company_form").serialize(),
+	        type: 'post',
+	        success: function (data) {
+	        	$("#service_list").html(data);
+	        	//$("#service_box_"+pID).hide();
+	        }
+	    });
+	}
+	function on_company_toggle(pType){
+		if(pType == 'save'){
+			$.ajax({
+		        url: "{% url 'ajax_savecompany' %}",
+		        data: $("#company_form").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	$(".dlg-skill-content").html(data);
+		        	$("#tog_company_edit").show();
+				    $("#tog_company_save").hide();
+				    $("#profile_status").val("save");
+		        }
+		    });
+		}
+		else if(pType == 'undo'){
+			$("#company_form input").val("");
+			$.ajax({
+		        url: "{% url 'ajax_savecompany' %}",
+		        data: $("#company_form").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	on_toggle('edit');
+		        	$("#profile_status").val("edit");
+		        }
+		    });
+		    $("#profile_status").val("edit");
+		}
+		else if (pType == 'edit'){
+			$.ajax({
+		        url: "{% url 'ajax_getcompany' %}",
+		        data: $("#profile_form").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	$(".dlg-skill-content").html(data);
+		        	$("#tog_company_edit").hide();
+				    $("#tog_company_save").show();
+				    $("#profile_status").val("edit");
+		        }
+		    });
+		}
+	}
+	function new_service(){
+		$.ajax({
+	        url: "{% url 'ajax_newservice' %}",
+	        data: $("#company_form").serialize(),
+	        type: 'post',
+	        success: function (data) {
+	        	$("#service_list").html(data);
+	        }
+	    });
+	}
+</script>

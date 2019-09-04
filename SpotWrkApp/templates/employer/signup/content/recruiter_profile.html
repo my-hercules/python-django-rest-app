@@ -1,0 +1,222 @@
+{% load staticfiles %}
+<div class = "container">
+	<div class = "left-float">
+		<span class = "text-header bottom-margin-medium" >RECRUITER PROFILE</span>
+		<div class = "flat-dlg recruiter-dlg border-pink border-pink-freelance">
+			<!-- <div class = "dlg-photo"></div> -->
+			<img class = "dlg-photo" src = "/{{recruiter.profile.profile_pic}}">
+			<div class = "dlg-stick" style = "height:215px;"></div>
+			<div class = "dlg-content row">
+				<div id = "pro_overview" class = "left-margin-medium">
+					<div class = "overview-name-box">
+						<div class = "profile-overview-name " id = "pro_Oname">{{recruiter.profile.first_name}} {{recruiter.profile.last_name}}</div>
+						<div class = "profile-overview-location " id = "pro_Oloc">{{recruiter.profile.location}}</div>
+						{%if recruiter.profile.is_company%}<div class = "profile-overview-location text-bold" id = "pro_Orole">{{recruiter.profile.current_role}} @ {{recruiter.profile.company_name}}</div>{%endif%}
+					</div>
+				</div>
+					<div class = "col-sm-12">
+						<div class = "col-sm-12" style = "margin-bottom:16px;margin-top:0px;" id = "skill_box">
+						</div>
+						<script>
+							var str = "{{recruiter.profile.skill}}";
+							newfilter = str.split(",");
+							$.each(newfilter,function(no,value){
+								if(value != ""){
+									$("#skill_box").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+								}
+							});
+						</script>
+					</div>
+				<div class = "col-sm-12">
+					<div class = "dlg-content-social-facebook"></div>
+					<div class = "dlg-content-social-input">
+						<input class = "border-none" id = "pro_face" value="{{ recruiter.profile.social_facebook }}" type = "text" name = "facebook_address" placeholder = "www.facebook.com/??????">
+					</div>
+				</div>
+				<div class = "col-sm-12">
+					<div class = "dlg-content-social-linkedin"></div>
+					<div class = "dlg-content-social-input">
+						<input class = "border-none" id = "pro_link" type = "text" value="{{ recruiter.profile.social_linkedin }}" name = "linkedin_address" placeholder = "www.linkedin.com/??????">
+					</div>
+				</div>
+			</div>
+		</div>
+		<span class = "text-header bottom-margin-medium" >RECRUITING EXPERIENCE</span>
+		{%for exp in recruiter.experience_set.all%}
+		<div class = "flat-dlg recruiter-dlg border-green" id = "recruiter_{{exp.id}}">
+			<div class = "dlg-skill-content">
+				<div><span class = "text-medium">INDUSTRY SKILLS</span></div>
+				<div class = "margin-control"><span class = "text-small">List industries and skills below for which you can hire candidates.</span></div>
+				<div class = "dlg-skill-content-box">
+					<div class = "dlg-skill-content-list top-margin-small bottom-margin-medium">
+						<span class = "company_industry_list">{{exp.industry}}</span>
+				    </div>
+			        <div class = "row">
+							<div class = "col-sm-12" style = "margin-bottom:0px;margin-top:0px;margin-left:0px;" id = "skill_box_{{exp.id}}">
+							</div>
+							<script>
+								var str = "{{exp.skill}}";
+								newfilter = str.split(",");
+								$.each(newfilter,function(no,value){
+									if(value != ""){
+										$("#skill_box_{{exp.id}}").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+									}
+								});
+							</script>
+						<div class = "col-sm-12" style = "margin-bottom:5px;margin-top:0px;margin-left:0px;" id = "location_box_{{exp.id}}">
+						</div>
+						<script>
+							var str = "{{exp.location}}";
+							$("#location_box_{{exp.id}}").append("<span class = 'skill-tag-overview'>"+str+"</div>");
+						</script>
+					</div>
+					<div class = "margin-control"><span class = "text-small">Experience of most candidates hired</span></div>
+					<div class = "dlg-skill-content-list">
+						<div id = "round-dropdown">
+							<span class = "exp_level">{{exp.candidate_experience}}</span>
+						</div>
+				    </div>
+					<div class = "margin-control"><span class = "text-small">Number of candidates hired in this industry</span></div>
+					<div class = "dlg-skill-content-list">
+						<div id = "candidate-num-dropdown">
+							<span class = "company_industry_list" style = "padding:3px 8px;font-size:14px">{{exp.candidate_number}}</span>
+						</div>
+				    </div>
+				</div>
+				<div class = "dlg-stick" style="height:55%;"></div>
+				<div style = "float:left;width:35%;height:85%;" class = "text-center">
+
+					<div style = "margin-top:10%;margin-left:10%; {%if exp.company_number == 0%} visibility:hidden {%endif%}">
+						<span class = "text-small">Recruiter hired for</span><br>
+						<span class = "text-small text-bold">4 companies</span><span class ="text-small"> with</span><br>
+						<span class = "text-small text-bold">10 candidates</span>
+					</div>
+					<button data-toggle="modal" data-target="#modal1" type="button" onclick="onShowcandidate({{exp.id}})" style = "border:0;margin-top:10%;margin-left:10%" class = "candidate-image" name = "add_candidate" value = "{{exp.id}}"></button>
+					<span class = "text-small" style = "margin-left:10%;display:inline-block">Add candidate's profile</span>
+				</div>
+			</div>
+		</div>
+		{%endfor%}
+	</div>
+	<div class = "left-float left-margin-large" style = "width:500px;">
+		<span class = "text-header bottom-margin-medium" >ORDER DETAIL</span>
+		<div class = "flat-dlg" style = "width:auto">
+	<!-- <div style="overflow:scroll; height:400px;overflow-y: auto;overflow-x:hidden"> -->
+	<div class = "scrollbar" id = "new-scroll" class="scrollbar">
+		{%for ord in recruiter.tborder_set.all%}
+			<div class = "content-box" id = "order_{{ord.id}}" style = "padding:0px;margin:0px;">
+				<div id = "order_list_menu_{{ord.id}}" onclick = "on_select_category({{ord.id}})" class = "order-menu order-dlg {%if order_id != ord.id%}order_unchecked{%endif%}" style = "border-radius:0px;">
+					<div id = "order-list" class = "order-detail-menu left-float">
+						<div class= "order_category_div" ><span style="float:left;white-space: nowrap;overflow: hidden;">{{ord.category}}</span></div>
+			        </div>
+			        <div class = "left-float"><span class = "order-detail-font" style = "margin-left:110px;">{{ord.pay_fee_type}}{{ord.pay_flatfee}}</span></div>
+			        <div class = "right-float top-margin" id = "order_checked_{{ord.id}}" {%if order_id != ord.id%} hidden{%endif%}>
+						<div class = "left-float employer-order-toggle-select order-toggle-delete right-margin-small">
+						</div>
+					</div>
+				</div>
+				<div class = "order-complete-content" style = "height:120px;width:99.7%!important;margin-left:1px">
+					<div class = "left-float">
+						<span class = "order-complete-bluefont">{{ord.industry}}</span>
+						<div class = "bottom-margin"><span class = "text-small text-bold">{{ord.location}}</span></div>
+						<span class = "text-tiny">He can hire for</span>
+						<div style = "margin-left:0px;">
+							<div style = "margin-bottom:0px;margin-top:0px;" id = "skill_box_{{ord.id}}">
+							</div>
+							<script>
+								var str = "{{ord.skill}}";
+								newfilter = str.split(",");
+								var scount = 1;
+								$.each(newfilter,function(no,value){
+									if(value != ""){
+										if (scount > 3){
+											$("#skill_box_{{ord.id}}").append("<span class='skill-tag-overview'>...</div>");
+											return false;
+										}
+										$("#skill_box_{{ord.id}}").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+										scount += 1;
+									}
+								});
+							</script>	
+						</div>
+					</div>
+					<div class = "right-float order-small-toggle" style = "width:100px;">
+						<div class = "order-complete-toggle">
+							<div class = "left-float order-small-toggle-button-orderlevel" style = "background-image:url('{% static "img/spotwrk/New Files/"|add:ord.experience|add:".png"%}'"></div><span class = "left-float text-tiny top-margin left-margin">{{ord.experience}}</span>
+							<div class = "top-margin new-line left-float order-small-toggle-button-paytype"></div><span class = "left-float text-tiny top-margin-small left-margin">{{ord.pay_type}}</span>
+							<div class = "top-margin new-line left-float order-small-toggle-button-turnaround"></div><span class = "left-float text-tiny top-margin-small left-margin">{{ord.turnaround}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				set_tag_editor('#ord_skill{{ord.id}}',"#",'Skills','{%static "lists/skills.txt"%}','.order-complete-content','True');
+			</script>
+		{%endfor%}
+		<script>
+			function on_select_category(pID){
+				id_box = $("#order_id_input")
+				if(pID==id_box.val())
+					return;
+				$.ajax({
+			        url: "{% url 'ajax_getordertype' %}",
+			        data: {
+			          'order_id': pID,
+			        },
+			        success: function (data) {
+			          $("#criteria").html(data['criteria_origin']);
+			        }
+			    });
+				$("#order_list_menu_"+pID).removeClass("order_unchecked");
+				$("#order_list_menu_"+id_box.val()).addClass("order_unchecked");
+				$("#order_checked_"+pID).show();
+				$("#order_checked_"+id_box.val()).hide();
+				id_box.val(pID);
+			}
+		</script>
+	</div>
+			<span class = "text-medium">STANDARD SOURCING CRITERIAS</span>
+			<div id = "criteria">
+				{%include "employer/signup/ajax/ajax_order_criteria.html"%}
+			</div>
+			<span class = "text-small text-bold green-font left-margin-small bottom-margin"> ✓ ACCEPTED BY RECRUITER</span>
+			<form action = "{%url 'employer_hirerecruiter'%}" method = "post">
+				<input type = "text" value = "{{recruiter.id}}" name = "recruiter_id" hidden>
+				<input type = "text" value = "{{order_id}}" id = "order_id_input" name = "order_id" hidden>
+				<p style="width:100%;height:60px;margin-top:30px"><button type = "submit" name = "checkout" class = "btn green-button" style = "height:50px;width:150px;float:right;" onclick = "on_checkout()">CHECKOUT</button></p>
+			</form>
+		</div>
+	</div>
+</div>		
+<script>
+	set_nav_active("order");
+	function loadaccordion(){
+		$(function() {
+			var Accordion = function(el, multiple) {
+				this.el = el || {};
+				this.multiple = multiple || false;
+
+				// Variables privadas
+				var links = this.el.find('.link');
+				// Evento
+				links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+			}
+
+			Accordion.prototype.dropdown = function(e) {
+				var $el = e.data.el;
+					$this = $(this),
+					$next = $this.next();
+
+				$next.slideToggle();
+				$this.parent().toggleClass('open');
+
+				if (!e.data.multiple) {
+					$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+				};
+			}	
+
+			var accordion = new Accordion($('#accordion'), false);
+		});
+	}
+	loadaccordion();
+</script>

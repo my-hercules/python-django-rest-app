@@ -1,0 +1,94 @@
+{%load staticfiles%}
+		<div class = "border-blue" style = "background:white;font-family:Avenir;">
+			<div style = "width:100%;padding:5% 10%;padding-left:7%;position:relative;">
+				<p class = "profile-overview-name full-width bottom-margin-large text-center">
+					CANDIDATE DETAILS
+				</p>
+				<div class = "left-float" style = "width:80%;">
+					<div class = "dlg_candidate_item" style = "width:90%;">
+						<img class = "dlg_candidate_img" src="{%static 'img/employer/candidate_info.png'%}">
+						<span class = "table_detail_loc_font text-bold" style = "padding-top:3px;padding-right:5px;">
+							{{form.candidate_fname}}
+						</span>
+						<span class = "table_detail_loc_font text-bold" style = "padding-top:3px;padding-left:5px;">
+							{{form.candidate_lname}}
+						</span>
+					</div>
+					<div class = "dlg_candidate_item" style = "width:90%;">
+						<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_location.png"%}">
+						<span class = "table_detail_loc_font full-width">
+							{{form.candidate_location}}
+						</span>
+					</div>
+					<div class = "dlg_candidate_item" style = "width:90%;">
+						<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_role.png"%}">
+						<span class = "table_detail_loc_font full-width">
+							{{form.candidate_role}}
+						</span>
+					</div>
+					<div class = "dlg_candidate_item" style = "width:90%;">
+						<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_company.png"%}">
+						<span class = "table_detail_loc_font full-width">
+							{{form.candidate_company}}
+						</span>
+					</div>
+					<div class = "dlg_candidate_item" style = "width:90%;margin-bottom:0px;margin-top:5px;height:30px;">
+						<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_skill.png"%}">
+						<span class = "table_detail_loc_font full-width" id = "modal_skill">
+							{{form.candidate_skill}}
+						</span>
+						<script>
+						set_tag_editor('#id_candidate_skill',"#id_candidate_skill",'Skills','{%static "lists/skills.txt"%}');
+						</script>
+					</div>
+					<span class = "table_status_font" style = "font-size:13.5px;margin-left:50px;">Add fields seperated by commas.</span>
+					<div class = "dlg_candidate_item" style = "width:90%;">
+						<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_email.png"%}">
+						<span class = "table_detail_loc_font">
+							{{form.candidate_email}}
+						</span>
+						<img class = "dlg_candidate_img" src="{%static "img/employer/candidate_phone.png"%}">
+						<span class = "table_detail_loc_font">
+							{{form.candidate_phone}}
+						</span>
+					</div>
+					<div class = "dlg_candidate_item" style = "margin-left:50px;width:90%;">
+						<div class = "dlg-content-social-linkedin"></div>
+						<span class = "table_detail_loc_font left-margin-small" style = "float:right;width:79%">
+							{{form.candidate_linkedin}}
+						</span>
+					</div>
+					<div class = "dlg_candidate_item" style = "margin-left:50px;width:90%;">
+						<div class = "dlg-content-social-facebook"></div>
+						<span class = "table_detail_loc_font left-margin-small" style = "float:right;width:79%">
+							{{form.candidate_facebook}}
+						</span>
+					</div>
+				</div>
+				<div class = "left-float" style = "width:20%;height:70%">
+					<div class = "dlg_candidate_item" style = "height:100%;width:100%">
+						<div style = "width:100%;float:left;padding-left:0;" class = "">
+							<p class = "upload_doc"></p>
+							<button class = "table_btn_green" style="font-size:16px;width:150%;margin-left:-10px;margin-top:10px;">UPLOAD RESUME</button>
+						</div>
+					</div>
+				</div>
+				<div class = "dlg-toggle-menu" style = "top:40px;">
+					<button class = "toggle-save border-none" type ="button" id = "btn_candidatesave" onclick = ""></button>
+					<div class = "toggle-delete">
+					</div>
+				</div>
+			</div>
+		</div>
+	<script>
+		function show_candidate(pID){
+			$.ajax({
+		        url: "{% url 'ajax_get_dash_candidate' %}",
+		        data: { 'id' : pID },
+			    type: 'post',
+		        success: function (data) {
+		          $("#candidate_modal").html(data);
+		        }
+		    });
+		}
+	</script>

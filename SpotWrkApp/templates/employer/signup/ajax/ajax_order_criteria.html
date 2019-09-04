@@ -1,0 +1,68 @@
+<ul id="accordion" class="accordion" style = "display:block;float:none;font-family: Avenir;">
+  <li>
+    <div class="link text-small"><i class="fa fa-database"></i>1. Ready to Join<i class="fa fa-chevron-down"></i></div>
+    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+  </li>
+  <li>
+    <div class="link"><i class="fa fa-code"></i>2. Qualified for job<i class="fa fa-chevron-down"></i></div>
+    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+  </li>
+{%if order.category == "SCREENING"%}
+  <li>
+    <div class="link"><i class="fa fa-mobile"></i>3. Ready for further screening<i class="fa fa-chevron-down"></i></div>
+    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+  </li>
+{%elif order.category == "SOURCING"%}
+  <li>
+    <div class="link"><i class="fa fa-mobile"></i>3. Fulfils assessment criteria like core skills and culture fit. <i class="fa fa-chevron-down"></i></div>
+    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+  </li>
+{%else%}
+  <li>
+    <div class="link"><i class="fa fa-mobile"></i>3.  Fulfils assessment criteria core skills and culture fit. <i class="fa fa-chevron-down"></i></div>
+    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+  </li>
+{%endif%}
+  <li>
+    <div class="link"><i class="fa fa-globe"></i>4. Accepts T&C of Job<i class="fa fa-chevron-down"></i></div>
+    <div class = "submenu"><div class = "accordion_text">Recruiter must make sure that candidates delivered to clients by him/her as the outcome of "Standard Sourcing Service" are ready to join as per job's requirement shared by client</div></div>
+  </li>
+  <li id = "li_new">
+    <div class="link"><i class="fa fa-globe"></i><div id = "newcriteria">5. {{order.criteria_header}}</div><i class="fa fa-chevron-down"></i>
+    </div>
+    <div class = "submenu">
+    	<textarea onkeyup="adjustHeight(this)" class = "criteria-text" name = "order[0][criteria]" style = "border-radius:0;border-width:0px;border-top-width:1px;min-height: 60px;overflow: hidden;word-wrap:break-word;resize:none">{{order.criteria}}</textarea>
+    </div>
+  </li>
+</ul>
+<script>
+function loadaccordion(){
+		$(function() {
+			var Accordion = function(el, multiple) {
+				this.el = el || {};
+				this.multiple = multiple || false;
+
+				// Variables privadas
+				var links = this.el.find('.link');
+				// Evento
+				links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+			}
+
+			Accordion.prototype.dropdown = function(e) {
+				var $el = e.data.el;
+					$this = $(this),
+					$next = $this.next();
+
+				$next.slideToggle();
+				$this.parent().toggleClass('open');
+
+				if (!e.data.multiple) {
+					$el.find('.submenu').not($next).slideUp().parent().removeClass('open');
+				};
+			}	
+
+			var accordion = new Accordion($('#accordion'), false);
+		});
+	}
+	loadaccordion();
+</script>

@@ -1,0 +1,23 @@
+{% load staticfiles %}
+
+	<div class = "progress-div" id = "progress_div">
+		<div class = "progress-heading">
+			<div class = "progress-label left-text" id = "progress_head_profile">1.Order</div>
+			<div class = "progress-label center-text" ><span id = "progress_head_order">2.Checkout </span>
+			</div>
+			<div class = "progress-label right-text" id = "progress_head_payment">3.Payment</div>
+		</div>
+	    <div class  = "progress-blank">
+		    <div class = "progress-oval"></div>
+		    <div class = "progress-inprogress half-width" id = "progress_progress" hidden></div>
+		    <div class = "progress-oval middle-pos" id = "progress_oval_order" hidden></div>
+		    <div class = "progress-oval full-pos" id = "progress_oval_payment" hidden></div>
+	    </div>
+	</div>
+
+
+<div class = "container" style = "width:100%;height:100%;">
+    <div class = "row" id = "content" >
+        {% include "employer/signup/content/"|add:page|add:".html" %}
+    </div>
+</div>

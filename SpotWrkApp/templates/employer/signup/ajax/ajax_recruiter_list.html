@@ -1,0 +1,66 @@
+{%load staticfiles%}
+{%for recruiter in recruiters%}
+	{% if recruiter.tborder_set.all.0 is not none%}
+		<div class = "recruiter_list">
+			<div class = "flat-dlg" style = "display:flex;padding:0px;padding-left:20px">
+				<div style = "float:left;width:200px;height:160px;margin-top:30px;">
+					<img class = "rec_photo" src = "/{{recruiter.profile.profile_pic}}">
+				</div>
+				<div style = "float:left;width:100%!important">
+					<div class = "rec_name">{{recruiter.profile.first_name}} {{recruiter.profile.last_name}}</div>
+					<div class = "content-box bottom-margin-medium" id = "order_{{ord.id}}" style = "padding:0px;margin:0px!important;">
+						<div class = "order-menu order-dlg" style = "border-radius:0;width:100%">
+							<div id = "order-list" class = "order-detail-menu left-float">
+								<div class= "order_category_div"><span style="float:left;white-space: nowrap;overflow: hidden;">{{recruiter.tborder_set.all.0.category}}</span></div>
+					        </div>
+					        <div style = "float:left;margin-left:80px"><span class = "order-detail-font" style = "">{{recruiter.tborder_set.all.0.pay_fee_type}}{{recruiter.tborder_set.all.0.pay_flatfee}}</span></div>
+					        <div class = "right-float">
+								<button type = "submit" name = "hire" value = "{{recruiter.id}}" class = "rec_hire_btn btn blue-button">HIRE</button>
+							</div>
+						</div>
+						<div class = "order-complete-content order-dlg rec_order_content" style = "border-radius:0px;padding-bottom:0px!important;height:100px;width:100%!important;">
+							<div class = "left-float">
+								<span class = "order-complete-bluefont">{{recruiter.tborder_set.all.0.industry}}</span>
+								<div class = "bottom-margin"><span class = "text-small text-bold">{{recruiter.tborder_set.all.0.location}}</span></div>
+								<span class = "text-tiny">He can hire for</span>
+								<div style = "margin-left:-15px;margin-top:-10px;">
+									<!-- <input type = "text" id = "rec_skill{{recruiter.id}}" placeholder = "Skills" value = "{{recruiter.tborder_set.all.0.skill}}" style = "padding-left:0px"> -->
+									<div class = "col-sm-12" style = "margin-bottom:16px;margin-top:0px;" id = "skill_box_{{recruiter.id}}">
+									</div>
+									<script>
+										var str = "";
+										{% for s_ord in recruiter.tborder_set.all %}
+											str = str + "{{s_ord.skill}}" + ",";
+										{% endfor%}
+										newfilter = str.split(",");
+										var scount = 1;
+										$.each(newfilter,function(no,value){
+											if(value != ""){
+												if (scount > 3){
+													$("#skill_box_{{recruiter.id}}").append("<span class='skill-tag-overview'>...</div>");
+													return false;
+												}
+												$("#skill_box_{{recruiter.id}}").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+												scount += 1;
+											}
+										});
+									</script>	
+								</div>
+							</div>
+							<div class = "right-float order-small-toggle" style = "width:100px;">
+								<div class = "order-complete-toggle">
+									<div class = "left-float order-small-toggle-button-orderlevel" style = "background-image:url('{% static "img/spotwrk/New Files/"|add:recruiter.tborder_set.all.0.experience|add:".png"%}'"></div><span class = "left-float text-tiny top-margin left-margin">{{recruiter.tborder_set.all.0.experience}}</span>
+									<div class = "top-margin new-line left-float order-small-toggle-button-paytype"></div><span class = "left-float text-tiny top-margin-small left-margin">{{recruiter.tborder_set.all.0.pay_type}}</span>
+									<div class = "top-margin new-line left-float order-small-toggle-button-turnaround"></div><span class = "left-float text-tiny top-margin-small left-margin">{{recruiter.tborder_set.all.0.turnaround}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+	{%endif%}
+	<script>
+		set_tag_editor('#rec_skill{{recruiter.id}}',"#rec_skill{{recruiter.id}}",'','{%static "lists/skills.txt"%}','.order-dlg','True');
+	</script>
+{%endfor%}

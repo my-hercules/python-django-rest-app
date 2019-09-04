@@ -1,0 +1,448 @@
+{%load staticfiles%}
+<script>
+	set_nav_active("profile");
+</script>
+<div class = "container">
+
+	{% csrf_token %}
+	<div class = "left-float">
+		<div class = "content-box">
+			<form method = "post" role = "form" id = "recruite_profileform">
+				<div id = "profile_overview">
+					<div class = "color-dlg border-pink border-pink-freelance">
+						<div class = "dlg-photo" onclick = "on_savephoto()">
+							<div hidden>
+								{{profileform.profile_pic}}
+							</div>
+							<img src="/{{user.profile.profile_pic}}" width="100%" height="100%" style = "border-radius:10px;" id = "id_profile_image">
+						</div>
+						<div class = "dlg-stick"></div>
+							<div class = "dlg-content row">
+								{% include "signup/ajax/freelance-profile-edit.html" %}
+							</div>
+						</form>
+						<div class = "dlg-toggle-menu">
+							<div id = "tog_edit" >
+								<button type = "button" name = "undo" class = "toggle-undo" onclick = "on_toggle('undo')">
+								</button>
+								<button type = "button" name = "save" class = "toggle-save" onclick = "on_toggle('save')">
+								</button>
+							</div>
+							<div id = "tog_overview" hidden>
+								<button type = "button" class = "toggle-edit" onclick = "on_toggle('edit')">
+								</button>
+								<button type = "button" name = "undo" class = "toggle-undo" onclick="on_toggle('undo')">
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			<span class = "text-header left-float" >RECRUITING EXPERIENCE</span>
+			<button class = "button-add right-float" style= "margin-top:0px;margin-bottom:10px;border:none;" onclick = "new_experience();">
+			</button>
+			<input value = "1" name = "experience_count" hidden>
+			<div id = "recruiter_experience">
+				<input type="text" name = "candidate_recid" id = "candidate_recid" hidden>
+				<input type="text" name = "experience_count" value = "0" id = "experience_count" hidden>
+				{%for exp in experience%}
+						<div id = "experience_form_{{exp.id}}">
+						{% include "signup/content/recruiter.html" %}
+						</div>
+				{%endfor%}
+			</div>
+		</div>
+	</div>
+	<div class = "left-float" style = "width:auto;margin-top:20px;margin-left:30px">
+		<button onclick = "on_final_submit()" type = "button" class = "btn blue-button submit-button">SUBMIT</button>
+	</div>
+</div>
+<script>
+	$('#id_profile_pic').on('change', function() {
+		var formData = new FormData($('#recruite_profileform').get(0));
+		$.ajax({
+	        url: "{% url 'ajax_saveprofileimage' %}",
+	        data: formData,
+	        cache: false,
+		    processData: false,
+		    contentType: false,
+	        type: 'post',
+	        success: function (data) {
+	        	d=new Date();
+	        	$("#id_profile_image").attr("src","/"+data+"?"+d.getTime());
+	        }
+	    });
+	});
+	function on_savephoto(){
+		document.getElementById('id_profile_pic').click();
+	}
+	function on_final_submit(){
+	}
+	function new_experience(){
+		$.ajax({
+	        url: "{% url 'ajax_newexperience' %}",
+	        type: 'post',
+	        success: function (data) {
+	        	$("#recruiter_experience").prepend(data);
+	        }
+	    });
+	}
+	function on_rec_toggle(pStr,pID)
+	{
+		if(pStr == "edit")
+		{
+			$.ajax({
+		        url: "{% url 'ajax_getexperience' %}",
+		        data: $("#recruite_form_"+pID).serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	$("#experience_form_"+pID).html(data);
+					$("#tog_rec_edit_"+pID).show();
+					$("#tog_rec_overview_"+pID).hide();
+		        }
+		    });
+		}
+		else if(pStr == "delete")
+		{
+			$.ajax({
+		        url: "{%url 'ajax_deleteexperience' %}",
+		        data: $("#recruite_form_"+pID).serialize(),
+		        type:'post',
+		        success: function (data) {
+		            $("#experience_form_"+pID).hide();
+		        }
+		    });
+		}
+		else if(pStr == "save")
+		{
+			$.ajax({
+		        url: "{% url 'ajax_saveexperience' %}",
+		        data: $("#recruite_form_"+pID).serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	$("#experience_form_"+pID).html(data);
+					$("#tog_rec_edit_"+pID).hide();
+					$("#tog_rec_overview_"+pID).show();
+		        }
+		    });
+		}
+		else if (pStr == "undo")
+		{
+			$("#recruite_form_"+pID+" input").val("");
+			$("#exp_id_"+pID).val(pID);
+			on_rec_toggle("save",pID);
+			on_rec_toggle("edit",pID);
+		}
+	}
+	function on_toggle(pStr)
+	{
+		if(pStr == "edit")
+		{
+			$.ajax({
+		        url: "{% url 'ajax_recruiter_getprofile' %}",
+		        type: 'post',
+		        success: function (data) {
+		        	$(".dlg-content").html(data);
+				    $("#tog_edit").show();
+				    $("#tog_overview").hide();
+		        }
+		    });
+		}
+		else if(pStr == "undo")
+		{
+			$("#recruite_profileform input").val("");
+			$.ajax({
+		        url: "{% url 'ajax_saveprofile' %}",
+		        data: $("#recruite_profileform").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	on_toggle('edit');
+		        }
+		    });
+		    //$("#profile_status").val("edit");
+		}
+		else if(pStr == "save")
+		{
+			$.ajax({
+		        url: "{% url 'ajax_recruiter_saveprofile' %}",
+		        data: $("#recruite_profileform").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	$(".dlg-content").html(data);
+				    $("#tog_edit").hide();
+				    $("#tog_overview").show();
+		        }
+		    });
+		}
+	}
+</script>
+
+<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style = "background:white;position:absolute;width:100%;height:auto;margin:auto;min-height:100%">
+	    <div class="modal-content modal-popup modal-active" style = "width:100%;height:200%;margin:auto;padding-top:10%;">
+		<div id = "saved_part"></div>
+	<input type = "text" id = "jd_progress" style="position:absolute;top:0px;"></div>
+	<form id = "candidate_form" action="" method = "post" enctype="multipart/form-data">{% csrf_token %}
+		<input type = "text" name = "candi_id" id = "candi_id" hidden value="">
+
+			<div class = "color-dlg border-blue">
+					<div class = "dlg-skill-content" id = "candidate_content" style = "position:relative">
+						<div><span class = "text-medium">ADD CANDIDATES</span></div>
+						<div class = "margin-control"><span class = "text-small">Add candidates in the <span id = "industry_candidate"></span> with <span id = "skill_candidate"></span></span></div>
+						<div class = "candidate-job">
+							<div class = "candidate-intro">
+								<div class = "candidate-intro-image-job"></div>
+								<div class = "container-fluid text-center"><span class = "text-small">About Job</span></div>
+							</div>
+							<div class = "candidate-content">
+						        <div style = "width:55%">
+									<textarea name = "skill" placeholder = "Describe Job" autofocus wrap = "hard"></textarea>
+									<div class = "margin-control" style = "margin-top:5px;margin-bottom:5px;"><span class = "text-small">or</span></div>
+
+									<input type="file" id="myfile_JD" name = "file_JD" style = 'visibility:hidden;height:0px'>
+									<a id = 'btn_uploadJD' class = "btn blue-button" onclick="document.getElementById('myfile_JD').click();">UPLOAD JD</a>
+								  	<div id = "fake_JD" class = "text-small" hidden></div>
+								  	  <div class="progress" role="progressbar" data-goal="100" id = "progress-JD" hidden>
+								  	  	<span class = "progress__label">UPLOADING</span>
+							            <div class="progress__bar" style="width: 100%"></div>
+							          </div>
+								</div>
+							</div>
+						</div>
+						<div class="dlg-v-stick"></div>
+						<div class = "candidate-job">
+							<div class = "candidate-intro">
+								<div class = "candidate-intro-image-client"></div>
+								<div class = "container-fluid text-center"><span class = "text-small">About Client</span></div>
+							</div>
+							<div class = "candidate-content">
+						        <div class = "candidate-content-60">
+									<input name = "client_name" id = "client_name" type = "text" placeholder = "Client name" value="{{candi_edit.client_name}}">
+								</div>
+								<div class = "candidate-content-35">
+									<input id = "isAnonymous1" onclick="onAnonymous('client_name','1')" style = "border:0.5px solid #4b74ff;width:15px;height:15px;" type = "checkbox" value="Anonymous"><span style ="margin-top:1px;" class = "text-small">Anonymous</span>
+								</div>
+								<div class = "candidate-content-60">
+									<textarea name = "client_description" type = "text" placeholder = "Client Description, Product/Service">{{candi_edit.client_description}}</textarea>
+								</div>
+								<div class = "candidate-content-35">
+									<input name = "client_site" type = "text" placeholder = "http://www.company.com" value = "{{candi_edit.client_site}}">
+								</div>
+								<div style="float:left;margin-top:-5px" class = "new-line"><span class = "text-tiny">Add fields seperated by commas.</span></div>
+							</div>
+
+						</div>
+						<div class="dlg-v-stick"></div>
+						<div class = "candidate-job">
+							<div class = "candidate-intro">
+								<div class = "candidate-intro-image-candidate"></div>
+								<div class = "container-fluid text-center"><span class = "text-small">About Candidate</span></div>
+							</div>
+							<input type = "text" value="0" name = "candidateinfo_count" id = "candidateinfo_count" hidden>
+
+							<div class = "candidate-content" >
+
+							{% for i in '0123456789' %}
+				        		<div id = "new_candidate{{i}}" {%if i != '0'%} hidden{%endif%}>
+									<div class = "candidate-content-60" {%if i != '0'%}style = "margin-top:20px;"{%endif%}>
+										<input name = "candidate_f_name{{i}}" style = "width:48%;margin-right:10px;" type = "text" placeholder = "First name" value="">
+										<input name = "candidate_l_name{{i}}" style = "width:48.5%" type = "text" placeholder = "Last name" value="" class="bottom-margin">
+
+										<input type = "text"  class = "mytags" id = "candidate_skill{{i}}" placeholder = "Skills" value = "">
+										<input value = "" name = "candidate_skills{{i}}" id = "temp_candiskill{{i}}" type ="text" hidden>
+										<script>
+								    		set_tag_editor('#candidate_skill{{i}}',"#temp_candiskill{{i}}",'Skills','{%static "lists/skills.txt"%}','#new_candidate{{i}}');
+										</script>
+										<div style=""><span class = "text-tiny">Add fields seperated by commas.</span></div>
+										<div class = "dlg-content-social-linkedin top-margin-10"></div>
+										<div class = "dlg-content-social-input top-margin-10">
+											<input value ="" name = "candidate_social_linkedin{{i}}" type = "text" placeholder = "www.linkedin.com/??????">
+										</div>
+									</div>
+									<div style = "float:right;margin-top:20px;width:38%">
+										<div class = "container-fluid">
+											<div class = "candidate-upload"  onclick="document.getElementById('myfile_resume{{i}}').click();"></div>
+											<!-- <div class = "text-center"><span class = "text-small upload-font">UPLOAD RESUME</span></div> -->
+											<div id = "fake_resume{{i}}" class = "text-small"></div>
+											<input type="file" id="myfile_resume{{i}}" name = "candidate_resume{{i}}" hidden style = 'visibility:hidden;height:0px;'>
+
+											<div class="progress" role="progressbar" data-goal="100" id = "progress-JD" hidden>
+										  	  	<span class = "progress__label">UPLOADING</span>
+									            <div class="progress__bar" style="width: 100%"></div>
+									          </div>
+											<script>
+												$('#myfile_resume{{i}}').change(function () {
+												    var a = $('#myfile_resume{{i}}').val().toString().split('\\');
+												    $('#fake_resume{{i}}').html(a[a.length -1]);
+												});
+											</script>
+										</div>
+									</div>
+								</div>
+							{%endfor%}
+							</div>
+							<div style = "margin-left:21%">
+								<div onclick  ="on_newinfo()" class = "button-add top-margin-10 new-line button-add"></div>
+								<div  class = "left-float new-line"><span class = "text-tiny">Add more candidates.</span></div>
+							</div>
+						</div>
+						<!-- href = "/ajax/profile" -->
+						<a data-dismiss="modal" style = "position:absolute;right:-30px;bottom:0px;" class = "text-center candidate_btn_back" style = "padding-top:18px;width:200px;height:40px;">Back  &larr;</a>
+					</div>
+				<div class = "dlg-toggle-menu">
+					<div class = "toggle-reset">
+					</div>
+					<div class = "toggle-delete">
+					</div>
+					<button class = "toggle-save border-none" type ="button" id = "btn_candidatesave" onclick = ""></button>
+				</div>
+			</div>
+	</form>
+	</div>
+</div>
+<script>
+	jQuery(function($) {
+      $('.progress').asProgress({
+        'namespace': 'progress'
+      });
+    });
+
+	function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: '#profile_overview',
+                intro: "Fill your personal <br>details",
+                position:'left'
+              },
+              {
+                element: '#help_experience',
+                intro: "Tell us about your recruiting experience like <i>whom you hired, the companies you hired for, the industries and skills in which you hired, etc.</i>",
+                position:'left'
+              },
+              {
+                element: '#help_addcandidate',
+                intro: 'Add candidates you hired.',
+                position: 'left'
+              },
+              {
+                element: '#submit_button',
+                intro: 'Read terms and conditions before you create your profile.',
+                position: 'left'
+              }
+            ]
+          });
+
+          intro.start();
+      }
+     {%if user.profile.iscompleted == False%}
+		startIntro();
+	 {%endif%}
+		function on_newinfo(){
+			newVal = parseInt($("#candidateinfo_count").val())+1;
+			if(newVal==10){
+				alert("You can't add any more");
+				return;
+			}
+			$("#candidateinfo_count").val(newVal);
+			$("#new_candidate"+$("#candidateinfo_count").val()).show();
+		}
+		
+		$(function() {
+			$( "#progressbar-JD" ).progressbar({
+		  		value: 0
+			});
+		});
+
+		$('#myfile_JD').change(function () {
+		    var a = $('#myfile_JD').val().toString().split('\\');
+		    $('#fake_JD').html(a[a.length -1]);
+		    $('.progress').asProgress('start');
+		    $("#btn_uploadJD").hide();
+		    $("#progress-JD").show();
+		});
+
+		set_nav_active("profile");
+		function onAnonymous(pID,pVal)
+		{
+			$("#"+pID).val($("#isAnonymous"+pVal).prop('checked') ? "Anonymous" : "{{candi_edit.client_name}}");
+		}
+		$("#progress_div").show();
+		function candidate_toggle(pID,pAction)
+		{
+			switch(pAction){
+				case "delete":
+					$.ajax({
+				        url: '/ajax/candidate_delete/'+pID,
+				        type: 'get',
+				        success: function (data) {
+				            $("#candidate_info_"+pID).hide()
+						    if (parseInt(pID) == parseInt($("#candi_id").val())){
+						    	$("#candi_id").val("");
+								for (i=1;i<10;i++)
+		        					$("#new_candidate"+i).hide();
+		        				cleartags();
+						    }
+				        }
+				    });
+
+					break;
+				case "edit":
+					$("#candi_id").val(pID);
+					$.ajax({
+				        url: '/ajax/candidate_edit/'+pID,
+				        type: 'get',
+				        success: function (data) {
+				            $("#candidate_content").html(data);
+				        }
+				    });
+					break;
+			}
+		}
+</script>
+<script>
+    function cleartags(){
+    	for(i=0;i<10;i++){
+    		var tags =$("#candidate_skill"+i).tagEditor('getTags')[0].tags;
+    		for (j = 0; j < tags.length; j++) { $("#candidate_skill"+i).tagEditor('removeTag', tags[j]); }
+    	}
+    }
+	function candidate_submit(pID) { // Save button clicked from the candidate edit
+		var formData = new FormData($('#candidate_form').get(0));
+        $.ajax({ // create an AJAX call...
+            data : formData,
+            type: $("#candidate_form").attr('method'), // GET or POST
+            url: $("#candidate_form").attr('action'), // the file to call
+            cache: true,
+		    processData: false,
+		    contentType: false,
+            success: function(data) { // on success..
+            	$.ajax({
+					type:'get',
+					url:'/getallcandidate/'+pID,
+					success: function(data2) {
+						$("#saved_part").html(data2);
+		            }
+				});
+				$('#candidate_form :input').val('');
+                $("#saved_part").html(data);
+		        $("#candi_id").val("");
+		        $("#candidateinfo_count").val("0");
+				$("#fake_JD").html("");
+
+				$("#fake_resume0").html('');
+		        for (i=1;i<10;i++){
+		        	$("#new_candidate"+i).hide();
+		        	$("#fake_resume"+i).html('');
+		        }
+		        cleartags();
+            }
+        });
+    }
+</script>
+
+<script>
+	$("#progress_div").show();
+	progress_setpos("profile");
+</script>

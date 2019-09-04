@@ -1,0 +1,91 @@
+{% load staticfiles %}
+	
+<input type = "text" value="" hidden id = "profile_status">
+<form action="/employer/main/profile/" enctype="multipart/form-data" method = "post" role = "form" id = "profile_form">
+<div class = "color-dlg border-pink border-pink-freelance">
+	<div class = "dlg-photo" onclick = "on_savephoto()">
+		<div hidden>
+			{{profileform.profile_pic}}
+		</div>
+		<img src="/{{user.profile.profile_pic}}" width="100%" height="100%" style = "border-radius:10px;" id = "id_profile_image">
+	</div>
+	<div class = "dlg-stick"></div>
+	<div class = "dlg-content row">
+		{% include "employer/signup/ajax/ajax_editprofile.html" %}
+	</div>
+	<div class = "dlg-toggle-menu">
+		<div id = "tog_edit" >
+			<button type = "button" name = "undo" class = "toggle-undo" onclick = "on_toggle('undo');">
+			</button>
+			<button type = "button" name = "save_user" class = "toggle-save" onclick = "on_toggle('save')">
+			</button>
+		</div>
+		<div id = "tog_overview" hidden>
+			<button class = "toggle-edit" onclick = "on_toggle('edit')">
+			</button>
+			<button type = "button" name = "undo" class = "toggle-reset" onclick="on_toggle('undo')">
+			</button>
+		</div>
+	</div>
+</div>
+</form>
+<script>
+	$('#id_profile_pic').on('change', function() {
+		var formData = new FormData($('#profile_form').get(0));
+		$.ajax({
+	        url: "{% url 'ajax_saveprofileimage' %}",
+	        data: formData,
+	        cache: false,
+		    processData: false,
+		    contentType: false,
+	        type: 'post',
+	        success: function (data) {
+	        	d=new Date();
+	        	$("#id_profile_image").attr("src","/"+data+"?"+d.getTime());
+	        }
+	    });
+	});
+	function on_savephoto(){
+		document.getElementById('id_profile_pic').click();
+	}
+	function on_toggle(pType){
+		if(pType == 'save'){
+			$.ajax({
+		        url: "{% url 'ajax_saveprofile' %}",
+		        data: $("#profile_form").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	$(".dlg-content").html(data);
+		    		$("#profile_status").val("save");
+				    $("#tog_edit").hide();
+				    $("#tog_overview").show();
+		        }
+		    });
+		}
+		else if(pType == 'undo'){
+			$("#profile_form input").val("");
+			$.ajax({
+		        url: "{% url 'ajax_saveprofile' %}",
+		        data: $("#profile_form").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	on_toggle('edit');
+		        }
+		    });
+		    $("#profile_status").val("edit");
+		}
+		else if (pType == 'edit'){
+			$.ajax({
+		        url: "{% url 'ajax_getprofile' %}",
+		        data: $("#profile_form").serialize(),
+		        type: 'post',
+		        success: function (data) {
+		        	$(".dlg-content").html(data);
+		        	$("#tog_edit").show();
+				    $("#tog_overview").hide();
+				    $("#profile_status").val("edit");
+		        }
+		    });
+		}
+	}
+</script>

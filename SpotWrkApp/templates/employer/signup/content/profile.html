@@ -1,0 +1,59 @@
+<script>
+	set_nav_active("profile");
+</script>
+<div class = "container">
+<!-- <form action="/employer/main/profile/" onkeydown="return !(event.keyCode==13)" method = "post" role = "form" id = "recruite_form"> -->
+	<div class = "left-float">
+		<div class = "content-box">
+			<div id = "profile_overview">
+				{% include "employer/signup/ajax/employer_profile.html" %}
+			</div>
+			<div id = "company_details">
+				<span class = "text-header left-float bottom-margin-medium" >COMPANY DETAILS</span>
+				{% include "employer/signup/content/company_details.html" %}
+			</div>
+		</div>
+	</div>
+	<div class = "left-float" style = "width:auto;margin-top:20px;margin-left:50px" id = "submit_button">
+		<a style = "padding-top:20px" href = "{%url 'employer_hirerecruiter'%}" type = "button" name = "final_submit" value = "final" class = "btn blue-button submit-button" onclick = "final_submit()">CREATE</a>
+	</div>
+<!-- </form> -->
+</div>
+<script>
+	function final_submit()
+	{
+		if($("#profile_status").val()!="save")
+			on_toggle('save');
+		if($("#company_status").val()!="save")
+			on_company_toggle('save');
+	}
+	$("#progress_div").hide();
+	//progress_setpos("profile");
+	function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: '#profile_overview',
+                intro: "Fill your personal <br>details",
+                position:'left'
+              },
+              {
+                element: '#company_details',
+                intro: "Tell us about your recruiting background like <i>whom you hired, the companies you hired for, the industries and skills in which you hired, etc.</i>",
+                position:'left'
+              },
+              {
+                element: '#submit_button',
+                intro: 'Read terms and conditions before you create your profile.',
+                position: 'left'
+              }
+            ]
+          });
+
+          intro.start();
+      }
+      {%if user.profile.is_completed == False%}
+		startIntro();	
+	  {%endif%}
+</script>

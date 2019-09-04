@@ -1,0 +1,23 @@
+{% extends "layout/base.html" %}
+
+{% block title %} Profile {% endblock %}
+
+{% block css %}
+	{% include "layout/employer/signup/css.html" %}
+{% endblock %}
+
+{% block js%}
+	{% include "layout/employer/signup/js.html" %}
+{% endblock %}
+
+{% block header %} 
+	{% include "layout/employer/signup/header.html" %}
+{% endblock %}
+
+{% block content %}
+	{% include "employer/signup/content/main.html" %}
+{% endblock %}
+
+{% block footer %}
+	{% include "layout/employer/signup/footer.html" %}
+{% endblock %}

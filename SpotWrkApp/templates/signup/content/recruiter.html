@@ -1,0 +1,106 @@
+{% load staticfiles %}
+<form onkeydown='return !(event.keyCode==13)' role = 'form' id = 'recruite_form_{{exp.id}}'>
+		<input type = "text" name = "exp_id" value = "{{exp.id}}" id = "exp_id_{{exp.id}}" hidden></input>
+		<div class = "color-dlg border-green" id = "recruiter_{{exp.id}}">
+			<div class = "dlg-skill-content">
+				<div><span class = "text-medium">INDUSTRY SKILLS</span></div>
+				<div class = "margin-control"><span class = "text-small">List industries and skills below for which you can hire candidates.</span></div>
+				<div class = "dlg-skill-content-box" id = "help_experience">
+					<div class = "dlg-skill-content-list">
+						<select name = "industry" value = "{{exp.industry}}">
+							{%for industry in industry_list%}
+								<option value="{{industry|slice:":-1"}}" {% if exp.industry == industry|slice:":-1" %} selected {% endif %}>{{industry}}</option>
+							{%endfor%}
+						  
+						</select>
+				    </div>
+			        <div class = "row">
+			        <div class = "mytagedit{{exp.id}}">
+				        <div class = "col-sm-12">
+							<!--<div class = "form-control top-margin-small" id = "exp_loc_{{exp.id}}">-->
+							<input id="rec_skill{{exp.id}}" value = "{{exp.skill}}" type = "text" placeholder = "Skills">
+							<input type = "text" value = "{{exp.skill}}" name = "skill" id = "temp_skill{{exp.id}}" hidden>
+							<input id = "rec_location{{exp.id}}" value = "{{exp.location}}"  type = "text" placeholder = "Locations where you hired most.">
+							<input type = "text" value = "{{exp.location}}" name = "location" id = "temp_location{{exp.id}}" hidden>
+							<script>
+								set_tag_editor('#rec_skill{{exp.id}}',"#temp_skill{{exp.id}}",'Skills','{%static "lists/skills.txt"%}','.mytagedit{{exp.id}}','False');
+								set_tag_editor('#rec_location{{exp.id}}',"#temp_location{{exp.id}}",'Locations where you hired most.','{%static "lists/locations.txt"%}','.mytagedit{{exp.id}}','False');
+								//$('#rec_skill').tagEditor('getTags')[0].tags );
+							</script>
+						</div>
+					</div>
+					</div>
+					<div class = "margin-control"><span class = "text-small">Experience of most candidates hired</span></div>
+					<div class = "dlg-skill-content-list">
+						<div id = "round-dropdown">
+							<select  name = "experience" value = "{{exp.candidate_experience}}">
+							  <option value="ENTRY LEVEL" {% if exp.candidate_experience == "ENTRY LEVEL" %} selected {% endif %}>ENTRY LEVEL</option>
+							  <option value="LOWER MID LEVEL" {% if exp.candidate_experience == "LOWER MID LEVEL" %} selected {% endif %}>LOWER MID LEVEL</option>
+							  <option value="MID LEVEL" {% if exp.candidate_experience == "MID LEVEL" %} selected {% endif %}>MID LEVEL</option>
+							  <option value="UPPER MID LEVEL" {% if exp.candidate_experience == "UPPER MID LEVEL" %} selected {% endif %}>UPPER MID LEVEL</option>
+							  <option value="TOP LEVEL" {% if exp.candidate_experience == "TOP LEVEL" %} selected {% endif %}>TOP LEVEL</option>
+							</select>
+						</div>
+				    </div>
+					<div class = "margin-control"><span class = "text-small">Number of candidates hired in this industry</span></div>
+					<div class = "dlg-skill-content-list">
+						<div id = "candidate-num-dropdown">
+							<select name = "count" value = "{{exp.candidate_number}}">
+							{% for c in '0123456789' %}
+							  <option value="{{c}}" {% if exp.candidate_number|stringformat:"i" == c %} selected {% endif %}>{{c}}</option>
+							{% endfor %}
+							</select>
+						</div>
+				    </div>
+				</div>
+				<div class = "dlg-stick" style="height:55%;"></div>
+				<div style = "float:left;width:37%;height:85%;" class = "text-center">
+
+					<div style = "margin-top:10%;margin-left:10%; {%if exp.company_number == 0%} visibility:hidden {%endif%}">
+						<span class = "text-small">You hired for</span><br>
+						<span class = "text-small text-bold">{{exp.company_number}} companies</span><span class ="text-small"> with</span><br>
+						<span class = "text-small text-bold">{{exp.hired_count}} candidates</span>
+					</div>
+					<div id = "help_addcandidate">
+					<button data-toggle="modal" data-target="#modal1" type="button" onclick="onShowcandidate({{exp.id}})" style = "border:0;margin-top:10%;margin-left:10%" class = "candidate-image" name = "add_candidate" value = "{{exp.id}}"></button>
+					<span class = "text-small" style = "margin-left:10%;display:inline-block">Add candidate's profile</span>
+					</div>
+				</div>
+			</div>
+
+			<div class = "dlg-toggle-menu">
+				<div id = "tog_rec_edit_{{exp.id}}">
+					<div class = "toggle-undo" onclick="on_rec_toggle('undo',{{exp.id}})" >
+					</div>
+					<div class = "toggle-save" onclick="on_rec_toggle('save',{{exp.id}})"></div>
+				</div>
+				<div id = "tog_rec_overview_{{exp.id}}" hidden>
+					<div class = "toggle-edit" onclick = "on_rec_toggle('edit',{{exp.id}})">
+					</div>
+					<div class = "toggle-delete" onclick="on_rec_toggle('delete',{{exp.id}})">
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			$('select').prettyDropdown();
+			function onShowcandidate(pID){
+				$('#candidate_form').attr('action','/createcandidate/{{exp.id}}/');
+				$('#btn_candidatesave').attr('onclick','candidate_submit({{exp.id}});');
+				$.ajax({
+					type:'get',
+					url:'/getallcandidate/'+pID,
+					success: function(data) {
+						$("#saved_part").html(data);
+		            }
+				});
+				$("#industry_candidate").html("industry");
+				$("#skill_candidate").html("{{exp.skill}}");
+				//$('#candidate_recid').val('{{exp.id}}');
+			}
+		</script>
+</form>
+<script>
+	sCount = parseInt($('#experience_count').val());
+	$('#experience_count').val(sCount+1);
+</script>

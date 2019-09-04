@@ -1,0 +1,77 @@
+{%load staticfiles%}
+				<div class = "margin-control"><span class = "text-small">This information will help recruiters to understand your requirements in detail</span></div>
+					<div class = "dlg-skill-content-box">
+					
+				        <div class = "row">
+				        	<div class = "col-sm-12" style = "height:50px;margin-top:10px;">
+				        		<span class = "company_industry_list">{{company.industry}}</span>
+				        	</div>
+				        	<div class = "col-sm-12">
+								<!-- <input id = "pro_loc" type = "text" name = "location" placeholder = "Company Name" value="{{ user.profile.location }}"> -->
+								<div class = "profile-overview-location text-bold">{{company.company_name}}</div>
+							</div>
+							<div class = "col-sm-12">
+								<!-- <textarea id = "pro_loc" type = "text" name = "location" placeholder = "Company description" value="{{ user.profile.location }}" style = "height:50px;resize:none" ></textarea> -->
+								<div class = "profile-overview-location">{{company.company_description}}</div>
+								<script>
+									$("#id_company_description").css("height","50px");
+								</script>
+							</div>
+				        	<div class = "col-sm-12">
+								<div class = "col-sm-12" style = "margin-bottom:0px;margin-top:0px;margin-left:-15px;" id = "company_skill_box">
+								</div>
+								<script>
+									var str = "{{company.company_skill}}";
+									newfilter = str.split(",");
+									$.each(newfilter,function(no,value){
+										if(value != ""){
+											$("#company_skill_box").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+										}
+									});
+								</script>
+							</div>
+							<div class = "col-sm-12" style = "padding-top:0px;">
+								<div class = "col-sm-12" style = "margin-bottom:0px;margin-top:0px;margin-left:-15px;" id = "hired_location">
+								</div>
+								<script>
+									var str = "{{company.hired_location}}";
+									newfilter = str.split(",");
+									$.each(newfilter,function(no,value){
+										if(value != ""){
+											$("#hired_location").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+										}
+									});
+								</script>
+							</div>
+							<div class = "col-sm-12">
+								<div class = "profile-overview-location">{{company.company_site}}</div>
+							</div>
+						</div>
+						<div class = "margin-control"><span class = "profile-overview-location text-bold">Employee count</span></div>
+						<div class = "dlg-skill-content-list">
+							<div id = "candidate-num-dropdown" class ="order-complete-bluefont">
+								{{company.employee_count}}
+							</div>
+					    </div>
+					</div>
+				<div class = "dlg-stick top-margin" style="height:85%;"></div>
+
+				<div id = "service_list">
+					<div style = "float:left;width:37%;height:85%;margin-top:60px;">
+						{% for service in services %}
+						<div class = "row">
+							<div class = "col-sm-12">
+								<div class = "profile-overview-location text-bold">{{service.name}}</div>
+							</div>
+							<div class = "col-sm-12">
+								<div class = "profile-overview-location" style = "word-wrap: break-word">{{service.description}}</div>
+							</div>
+							
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+<script>
+$("#company_form input").css("border","none");
+$("#company_form textarea").css("border","none");
+</script>

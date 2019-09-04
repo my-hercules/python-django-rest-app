@@ -1,0 +1,95 @@
+{%load staticfiles%}
+{{ candidate_form.management_form }}
+{% for form in candidate_form %}
+    {% for hidden in form.hidden_fields %} {{ hidden }} {% endfor %}
+	<div class = "candidate-job">
+		<div class = "candidate-intro">
+			<div class = "candidate-intro-image-candidate"></div>
+			<div class = "container-fluid text-center"><span class = "text-small">About Candidate</span></div>
+		</div>
+		<div class = "candidate-content" >
+    		<div id = "new_candidate{{i}}">
+				<div class = "candidate-content-60">
+					<div class = "text-small left-float top-margin" style = "width:3%;margin-left:-8px"><img src="{%static "img/employer/candidate_info.png"%}"></div>
+					<!-- <input name = "candidate_f_name{{i}}" style = "float:right;width:45%;" type = "text" placeholder = "First name" value=""> -->
+					<!-- <input name = "candidate_l_name{{i}}" style = "float:right;width:45%;margin-right:10px;" type = "text" placeholder = "Last name" value="" class="bottom-margin"> -->
+					<div style = "float:right;width:45%;" class="bottom-margin">
+						{{form.candidate_lname}}
+					</div>
+					<div style = "float:right;width:45%;margin-right:10px;">
+						{{form.candidate_fname}}
+					</div>
+
+					<div class = "text-small left-float top-margin-large" style = "width:3%;margin-left:-8px"><img src="{%static "img/employer/candidate_location.png"%}"></div>
+					<!-- <input class = "bottom-margin" style = "width:94%;float:right" name = "skill" placeholder = "Location" autofocus wrap = "hard"></input> -->
+					<div style = "width:94%;float:right" class = "bottom-margin">
+						{{form.candidate_location}}
+						<script>set_autocomplete("{{form.candidate_location.auto_id}}","{%static "lists/locations.txt"%}")</script>
+					</div>
+
+					<div class = "text-small left-float top-margin-large" style = "width:3%;margin-left:-8px"><img src="{%static "img/employer/candidate_role.png"%}"></div>
+					<!-- <input class = "bottom-margin" style = "width:94%;float:right" name = "skill" placeholder = "Current Role" autofocus wrap = "hard"></input> -->
+					<div style = "width:94%;float:right" class = "bottom-margin">
+						{{form.candidate_role}}
+					</div>
+
+					<div class = "text-small left-float top-margin-large" style = "width:3%;margin-left:-8px"><img src="{%static "img/employer/candidate_company.png"%}"></div>
+					<!-- <input class = "bottom-margin" style = "width:94%;float:right" name = "skill" placeholder = "Current Company" autofocus wrap = "hard"></input> -->
+					<div style = "width:94%;float:right" class = "bottom-margin">
+						{{form.candidate_company}}
+					</div>
+					
+					<div class = "text-small left-float" style = "margin-top:45px;width:3%;margin-left:-8px"><img src="{%static "img/employer/candidate_skill.png"%}"></div>
+					<div id = "candi_skill_tag" style = "width:94%;float:right">
+						<!-- <input type = "text" id = "candidate_skill" value = ""> -->
+						{{form.candidate_skill}}
+					</div>
+					
+					<input value = "" id = "temp_candiskill" type ="text" hidden>
+					<script>
+					set_tag_editor('#{{form.candidate_skill.auto_id}}',"#temp_candiskill",'Skills','{%static "lists/skills.txt"%}','#candi_skill_tag','False');
+					</script>
+					<div  style = "margin-top:-8px;float:left"><span class = "text-tiny">Add fields seperated by commas.</span>
+					</div>
+
+					<div class = "new-line text-small left-float top-margin" style = "width:3%;margin-left:-8px"><img src="{%static "img/employer/candidate_email.png"%}"></div>
+					<!-- <input name = "candidate_f_name{{i}}" style = "float:left;width:44%;margin-left:18px;" type = "text" placeholder = "First name" value=""> -->
+					<div style = "float:left;width:44%;margin-left:18px;">
+						{{form.candidate_email}}
+					</div>
+					<div class = "text-small left-float top-margin" style = "width:1%;"><img src="{%static "img/employer/candidate_phone.png"%}"></div>
+					<!-- <input name = "candidate_l_name{{i}}" style = "float:right;width:44%;" type = "text" placeholder = "Last name" value="" class="bottom-margin"> -->
+					<div style = "float:right;width:44%;">
+						{{form.candidate_phone}}
+					</div>
+					<div style = "width:94%;float:right">
+						<div class = "new-line dlg-content-social-linkedin top-margin-10"></div>
+						<div class = "dlg-content-social-input top-margin-10" style = "width:87%">
+							<!-- <input value ="" name = "candidate_social_linkedin{{i}}" type = "text" placeholder = "www.linkedin.com/??????"> -->
+							{{form.candidate_linkedin}}
+						</div>
+
+						<div class = "new-line dlg-content-social-facebook top-margin-10"></div>
+						<div class = "dlg-content-social-input top-margin-10" style = "width:87%">
+							<!-- <input value ="" name = "candidate_social_facebook{{i}}" type = "text" placeholder = "www.facebook.com/??????"> -->
+							{{form.candidate_facebook}}
+						</div>
+					</div>
+				</div>
+				<div style = "float:right;margin-top:20px;width:38%">
+					<div class = "container-fluid">
+						<div class = "candidate-upload"  onclick="document.getElementById('myfile_resume{{i}}').click();"></div>
+						<div id = "fake_resume{{i}}" class = "text-small"></div>
+						<input type="file" id="myfile_resume{{i}}" name = "candidate_resume{{i}}" hidden style = 'visibility:hidden;height:0px;'>
+						<script>
+							$('#myfile_resume{{i}}').change(function () {
+							    var a = $('#myfile_resume{{i}}').val().toString().split('\\');
+							    $('#fake_resume{{i}}').html(a[a.length -1]);
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endfor %}

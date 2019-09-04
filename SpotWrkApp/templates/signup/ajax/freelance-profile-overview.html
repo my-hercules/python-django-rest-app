@@ -1,0 +1,35 @@
+{% load staticfiles %}	
+		<div id = "pro_overview" class = "left-margin-medium">
+			<div class = "overview-name-box">
+				<div class = "profile-overview-name " id = "pro_Oname">{{user.profile.first_name}} {{user.profile.last_name}}</div>
+				<div class = "profile-overview-location " id = "pro_Oloc">{{user.profile.location}}</div>
+
+				<div class = "profile-overview-location text-bold" {% if user.profile.is_company == False %}hidden{%endif%} id = "pro_Orole">{{user.profile.current_role}} @ {{user.profile.company_name}}</div>
+			</div>
+		</div>
+		<div id = "user_skill_tag">
+			<div class = "col-sm-12" style = "margin-bottom:16px;margin-top:0px;margin-left:10px" id = "skill_box">
+			</div>
+			<script>
+				var str = "{{user.profile.skill}}";
+				newfilter = str.split(",");
+				$.each(newfilter,function(no,value){
+					if(value != ""){
+						$("#skill_box").append("<span class = 'skill-tag-overview'>"+value+"</div>");
+					}
+				});
+			</script>
+		</div>
+		
+			<div class = "col-sm-12" style = "margin-left:10px;">
+				<div class = "dlg-content-social-facebook"></div>
+				<div class = "dlg-content-social-input">
+					<div style = "margin-top:5px;margin-left:10px;">{{ user.profile.social_facebook }}</div>
+				</div>
+			</div>
+			<div class = "col-sm-12" style = "margin-left:10px;">
+				<div class = "dlg-content-social-linkedin"></div>
+				<div class = "dlg-content-social-input">
+					<div style = "margin-top:5px;margin-left:10px;">{{ user.profile.social_linkedin }}</div>
+				</div>
+			</div>

@@ -1,0 +1,81 @@
+{%load staticfiles%}
+	<div class = "table_list">
+		<div class = "table_header table_header_font">
+			<span class = "table_column_status">&nbsp
+			</span>
+			<span class = "table_column_company">
+				Client Company
+			</span>
+			<span class = "table_column_user">
+				User details
+			</span>
+			<span class = "table_column_category">
+				Order Category
+			</span>
+			<span class = "table_column_details">
+				Order Details
+			</span>
+			<span class = "table_column_level">&nbsp
+			</span>
+			<span class = "table_column_action">&nbsp
+			</span>
+		</div>
+	{%for order in orders%}
+		<div class = "table_row">
+			<div class = "table_column_status">
+				<span class = "table_status_font text-bold">Going on</span><br>
+				<span class = "table_status_font">Today</span><br>
+			</div>
+			<div class = "table_column_company">
+				<span class = "table_companyname_font">{{order.rec.profile.company_name}}</span><br>
+				<span class = "table_companyloc_font">{{order.rec.profile.location}}</span><br>
+			</div>
+			<div class = "table_column_user">
+				<img class = "table_user_img" src = "/{{order.rec.profile.profile_pic}}"><br>
+				<span class = "table_user_font">{{order.rec.profile.first_name}}&nbsp{{order.rec.profile.last_name}}</span><br>
+				<span class = "table_user_font">{{order.rec.profile.current_role}}</span><br>
+			</div>
+			<div class = "table_column_category">
+				<span class = "table_category_font">{{order.category}}</span>
+			</div>
+			<div class = "table_column_details">
+				<span class = "table_detail_industry_font">{{order.recruiter_order.industry}}</span><br>
+				<span class = "table_detail_loc_font">{{order.recruiter_order.location}}</span><br>
+				<span style = "margin-bottom:0px;margin-top:0px;margin-left:0px;" id = "skill_box{{order.id}}"></span>
+				<script>
+					var str = "{{order.recruiter_order.skill}}";
+					newfilter = str.split(",");
+					$.each(newfilter,function(no,value){
+						if(value != ""){
+							$("#skill_box{{order.id}}").append("<div class = 'skill-tag-overview'>"+value+"</div>");
+						}
+					});
+				</script>
+			</div>
+			<div class = "table_column_level">
+				<div class = "order-complete-toggle">
+					<div class = "left-float order-small-toggle-button-orderlevel" style = "background-image:url('{% static "img/spotwrk/New Files/" %}{{order.recruiter_order.experience}}.png')"></div><span class = "left-float text-tiny top-margin left-margin" style = "width:auto;">{{order.recruiter_order.experience}}</span>
+					<div class = "new-line left-float order-small-toggle-button-paytype"></div><span style = "width:auto;" class = "left-float text-tiny top-margin-small left-margin">{{order.recruiter_order.pay_type}}</span>
+					<div class = "new-line left-float order-small-toggle-button-turnaround"></div><span style = "width:auto;" class = "left-float text-tiny top-margin-small left-margin">{{order.recruiter_order.turnaround}}</span>
+				</div>
+			</div>
+			<div class = "table_column_action">
+				<span class = "table_price_font">{{order.recruiter_order.pay_fee_type}}{{order.recruiter_order.pay_flatfee}}</span><br>
+				<button class = "table_btn_green" onclick="on_dash_view({{order.id}})">VIEW</button>
+			</div>
+		</div>
+	{%endfor%}
+	</div>
+<script>
+	function on_dash_view(pID){
+		sID = parseInt(pID);
+		$.ajax({
+			method : 'post',
+	        url: "{% url 'ajax_recruiter_dashboard' %}",
+	        data: {'id':sID,'from':'overview'},
+	        success: function (data) {
+	          $("#dashboard_content").html(data);
+	        }
+	    });
+	}
+</script>
